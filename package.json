@@ -8,7 +8,13 @@
     "open-mstdn-app": "./bin/cli.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc --pretty -p .",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "tslint --project tsconfig.json --type-check $(git ls-files | grep -E \"\\.ts$\")",
+    "watch": "guard --watchdir main renderer typings",
+    "debug": "NODE_ENV=development electron .",
+    "start": "NODE_ENV=production electron .",
+    "release": "npm run lint && ./scripts/make-release.sh"
   },
   "repository": {
     "type": "git",
@@ -33,6 +39,7 @@
     "@types/node": "^7.0.12",
     "electron-packager": "^8.6.0",
     "npm-run-all": "^4.0.2",
+    "tslint": "^5.1.0",
     "typescript": "^2.2.2"
   },
   "dependencies": {
