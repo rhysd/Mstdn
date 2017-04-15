@@ -1,4 +1,4 @@
-import * as Mousetrap from 'mousetrap';
+// import * as Mousetrap from 'mousetrap';
 import {Config} from '../main/config';
 import * as Ipc from './ipc';
 import log from './log';

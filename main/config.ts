@@ -1,4 +1,4 @@
-import {app, systemPreferences} from 'electron';
+import {app, systemPreferences, dialog, shell} from 'electron';
 import * as fs from 'fs';
 import {join} from 'path';
 import log from './log';
@@ -28,10 +28,31 @@ function makeDefaultConfig(): Config {
         icon_color: IsDarkMode ? 'white' : 'black',
         always_on_top: false,
         normal_window: menubarBroken,
-        zoom_factor: 1.0,
-        accounts: [],
+        zoom_factor: 0.9,
+        accounts: [{
+            name: '',
+            host: '',
+            default_page: '/web/timelines/home',
+        }],
         keymaps: {},
     };
+}
+
+function showDyingDialog(title: string, detail: string) {
+    dialog.showMessageBox({
+        type: 'info',
+        message: title,
+        detail,
+    }, () => {
+        app.quit();
+    });
+}
+
+function recommendConfigAndDie(file: string) {
+    const title = 'Please write configuration in JSON'
+    const detail = 'You need to write up name and host in first item of accounts. Restart this app after writing up them. Please see README for more detail: https://github.com/rhysd/Mstdn#readme';
+    shell.openItem(file);
+    showDyingDialog(title, detail);
 }
 
 export default function loadConfig(): Promise<Config> {
@@ -46,11 +67,15 @@ export default function loadConfig(): Promise<Config> {
                 // If calling writeFile() directly here, it tries to create config file before Electron
                 // runtime creates data directory. As the result, writeFile() would fail to create a file.
                 if (app.isReady()) {
-                    fs.writeFile(file, JSON.stringify(default_config, null, 2));
+                    fs.writeFileSync(file, JSON.stringify(default_config, null, 2));
+                    recommendConfigAndDie(file);
                 } else {
-                    app.once('ready', () => fs.writeFile(file, JSON.stringify(default_config, null, 2)));
+                    app.once('ready', () => {
+                        fs.writeFileSync(file, JSON.stringify(default_config, null, 2));
+                        recommendConfigAndDie(file);
+                    });
                 }
-                return resolve(default_config);
+                return;
             }
 
             try {
@@ -59,10 +84,14 @@ export default function loadConfig(): Promise<Config> {
                     config.hot_key = `CmdOrCtrl+${config.hot_key.slice(4)}`;
                 }
                 log.debug('Configuration was loaded successfully', config);
-                resolve(config);
+                if (!config.accounts || config.accounts[0].host === '' || config.accounts[0].name === '') {
+                    recommendConfigAndDie(file);
+                } else {
+                    resolve(config);
+                }
             } catch (e) {
-                log.error('Error on loading JSON file, will load default configuration:', e.message);
-                resolve(makeDefaultConfig());
+                log.debug('Error on loading JSON file', e);
+                showDyingDialog('Error on loading JSON file', e.message)
             }
         });
     });
