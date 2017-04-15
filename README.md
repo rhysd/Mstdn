@@ -3,10 +3,10 @@ Web-based Desktop Client for [Mastodon][]
 
 Features:
 
-- Small window on your menubar (or isolated window)
-- Desktop notification
-- Customizable shortcut keybinds
-- Multi-account
+- [x] Small window on your menubar (or isolated window)
+- [ ] Desktop notification
+- [ ] Customizable shortcut keybinds
+- [ ] Multi-account
 
 Mastodon is an open source project. So if you want to make a new UI, you can just fork the project,
 implement your favorite UI and host it on your place. Then you can participate Mastodon networks from it.

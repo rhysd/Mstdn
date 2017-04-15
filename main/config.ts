@@ -6,6 +6,7 @@ import log from './log';
 export interface Account {
     host: string;
     name: string;
+    default_page: string;
 }
 
 export interface Config {

@@ -3,7 +3,7 @@ import {app, BrowserWindow, globalShortcut, Tray} from 'electron';
 import windowState = require('electron-window-state');
 import * as menubar from 'menubar';
 import log from './log';
-import {Config} from './config'
+import {Config, Account} from './config'
 
 const IS_DEBUG = process.env.NODE_ENV === 'development';
 const IS_DARWIN = process.platform === 'darwin';
@@ -12,23 +12,23 @@ const DEFAULT_WIDTH = 340;
 const DEFAULT_HEIGHT = 400;
 
 export class App {
-    private host: string;
+    private account: Account;
 
     constructor(private win: Electron.BrowserWindow, private config: Config) {
         if (config.accounts.length === 0) {
             throw new Error('No account found. Please check the config.');
         }
-        this.host = this.config.accounts[0].host;
+        this.account = this.config.accounts[0];
     }
 
     open() {
-        this.win.loadURL(`https://${this.host}`);
+        this.win.loadURL(`https://${this.account.host}${this.account.default_page}`);
         this.win.show();
     }
 }
 
 function trayIcon(color: string) {
-    return path.join(__dirname, '..', 'resources', `tray-icon-${
+    return path.join(__dirname, '..', 'resources', 'icon', `tray-icon-${
         color === 'white' ? 'white' : 'black'
     }@2x.png`);
 }
@@ -109,6 +109,7 @@ function startNormalWindow(config: Config): Promise<Electron.BrowserWindow> {
         tray.on('double-click', toggleWindow);
         if (IS_DARWIN) {
             tray.setHighlightMode('never');
+            app.dock.setIcon(APP_ICON);
         }
     });
 }
