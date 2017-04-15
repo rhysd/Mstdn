@@ -1,0 +1,3 @@
+type IpcChannel
+    = 'mstdn:config'
+;

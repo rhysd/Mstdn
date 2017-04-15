@@ -8,6 +8,7 @@ import {Config, Account} from './config'
 const IS_DEBUG = process.env.NODE_ENV === 'development';
 const IS_DARWIN = process.platform === 'darwin';
 const APP_ICON = path.join(__dirname, '..', 'resources', 'icon.png');
+const PRELOAD_JS = path.join(__dirname, '..', 'renderer', 'preload.js');
 const DEFAULT_WIDTH = 340;
 const DEFAULT_HEIGHT = 400;
 
@@ -57,6 +58,7 @@ function startNormalWindow(config: Config): Promise<Electron.BrowserWindow> {
             webPreferences: {
                 nodeIntegration: false,
                 sandbox: true,
+                preload: PRELOAD_JS,
             },
         });
         win.once('ready-to-show', () => {
@@ -135,6 +137,7 @@ function startMenuBar(config: Config): Promise<Electron.BrowserWindow> {
             webPreferences: {
                 nodeIntegration: false,
                 sandbox: true,
+                preload: PRELOAD_JS,
             },
         });
         mb.once('ready', () => mb.showWindow());
