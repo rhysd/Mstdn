@@ -1,0 +1,45 @@
+{
+  "name": "mstdn",
+  "productName": "Mstdn",
+  "version": "0.0.0",
+  "description": "Tiny web-based mastodon client for your desktop",
+  "main": "main/index.js",
+  "bin": {
+    "open-mstdn-app": "./bin/cli.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rhysd/Mstdn.git"
+  },
+  "keywords": [
+    "mastodon",
+    "desktop",
+    "client",
+    "electron"
+  ],
+  "author": "rhysd <lin90162@yahoo.co.jp>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rhysd/Mstdn/issues"
+  },
+  "homepage": "https://github.com/rhysd/Mstdn#readme",
+  "devDependencies": {
+    "@types/electron": "^1.4.35",
+    "@types/electron-window-state": "^2.0.28",
+    "@types/mousetrap": "^1.5.33",
+    "@types/node": "^7.0.12",
+    "electron-packager": "^8.6.0",
+    "npm-run-all": "^4.0.2",
+    "typescript": "^2.2.2"
+  },
+  "dependencies": {
+    "electron": "^1.6.2",
+    "electron-window-state": "^4.1.1",
+    "loglevel": "^1.4.1",
+    "menubar": "github:rhysd/menubar#rhysd-fixes",
+    "mousetrap": "^1.6.1"
+  }
+}

@@ -1,0 +1,7 @@
+*.js.map
+/main/**/*.js
+/renderer/**/*.js
+/node_modules
+npm-debug.log
+/dist
+/app
