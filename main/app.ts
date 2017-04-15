@@ -1,5 +1,5 @@
 import * as path from 'path';
-import {app, BrowserWindow, globalShortcut, Tray} from 'electron';
+import {app, BrowserWindow, globalShortcut, Tray, shell} from 'electron';
 import windowState = require('electron-window-state');
 import * as menubar from 'menubar';
 import log from './log';
@@ -23,6 +23,16 @@ export class App {
     }
 
     open() {
+        this.win.webContents.on('will-navigate', (e, url) => {
+            if (!url.startsWith(`https://${this.account.host}`)) {
+                e.preventDefault();
+                shell.openExternal(url);
+            }
+        });
+        this.win.webContents.on('new-window', (e, url) => {
+            e.preventDefault();
+            shell.openExternal(url);
+        });
         this.win.loadURL(`https://${this.account.host}${this.account.default_page}`);
         this.win.show();
     }
