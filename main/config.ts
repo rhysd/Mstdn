@@ -34,7 +34,17 @@ function makeDefaultConfig(): Config {
             host: '',
             default_page: '/web/timelines/home',
         }],
-        keymaps: {},
+        keymaps: {
+            j: 'scroll-down',
+            k: 'scroll-up',
+            i: 'scroll-top',
+            m: 'scroll-bottom',
+            1: '/web/timelines/home',
+            2: '/web/notifications',
+            3: '/web/timelines/public/local',
+            4: '/web/timelines/public',
+            5: '/web/getting-started'
+        },
     };
 }
 

@@ -4,7 +4,7 @@ Web-based Desktop Client for [Mastodon][]
 Features:
 
 - [x] Small window on your menubar (or isolated window)
-- [ ] Desktop notification
+- [x] Desktop notification
 - [ ] Customizable shortcut keybinds
 - [ ] Multi-account
 
