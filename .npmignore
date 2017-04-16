@@ -1,0 +1,14 @@
+*.plist
+*.log
+*.icns
+*.ico
+*.svg
+/dist
+/app
+/Guardfile
+/tslint.json
+/tsconfig.json
+/scripts
+*.ts
+*.js.map
+/typings
