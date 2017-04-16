@@ -112,7 +112,6 @@ function startNormalWindow(config: Config): Promise<Electron.BrowserWindow> {
             if (IS_DEBUG) {
                 win.webContents.openDevTools({mode: 'detach'});
             }
-            resolve(win);
         });
 
         const normalIcon = trayIcon(config.icon_color);
@@ -123,6 +122,8 @@ function startNormalWindow(config: Config): Promise<Electron.BrowserWindow> {
             tray.setHighlightMode('never');
             app.dock.setIcon(APP_ICON);
         }
+
+        resolve(win);
     });
 }
 
