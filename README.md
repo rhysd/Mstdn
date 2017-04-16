@@ -8,7 +8,7 @@ Features:
 - [x] Small window on your menubar (or isolated window)
 - [x] Desktop notification
 - [x] Customizable shortcut keybinds
-- [ ] Multi-account
+- [ ] Multi-account (switching among accounts)
 
 Mastodon is an open source project. So if you want to make a new UI, you can just fork the project,
 implement your favorite UI and host it on your place. Then you can participate Mastodon networks from it.

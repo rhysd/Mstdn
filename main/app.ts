@@ -1,5 +1,5 @@
 import * as path from 'path';
-import {app, BrowserWindow, globalShortcut, Tray, shell} from 'electron';
+import {app, BrowserWindow, globalShortcut, Tray, shell, dialog} from 'electron';
 import windowState = require('electron-window-state');
 import * as menubar from 'menubar';
 import log from './log';
@@ -23,6 +23,7 @@ export class App {
     }
 
     open() {
+        this.win.loadURL(`https://${this.account.host}${this.account.default_page}`);
         this.win.webContents.on('will-navigate', (e, url) => {
             if (!url.startsWith(`https://${this.account.host}`)) {
                 e.preventDefault();
@@ -33,7 +34,23 @@ export class App {
             e.preventDefault();
             shell.openExternal(url);
         });
-        this.win.loadURL(`https://${this.account.host}${this.account.default_page}`);
+        this.win.webContents.session.setPermissionRequestHandler((contents, permission, callback) => {
+            if (permission !== 'geolocation' && permission !== 'media') {
+                // Granted
+                callback(true);
+                return;
+            }
+
+            dialog.showMessageBox({
+                type: 'question',
+                buttons: ['Accept', 'Reject'],
+                message: `Permission '${permission}' is requested by ${contents.getURL()}`,
+                detail: "Please choose one of 'Accept' or 'Reject'",
+            }, (buttonIndex: number) => {
+                const granted = buttonIndex === 0;
+                callback(granted);
+            });
+        });
         this.win.show();
     }
 }
