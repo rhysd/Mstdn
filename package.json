@@ -18,7 +18,7 @@
     "watch": "guard --watchdir main renderer typings",
     "debug": "NODE_ENV=development electron .",
     "start": "NODE_ENV=production electron .",
-    "release": "npm run lint && npm run build:release && ./scripts/make-release.sh"
+    "release": "npm run lint && ./scripts/make-release.sh"
   },
   "repository": {
     "type": "git",
