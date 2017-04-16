@@ -36,9 +36,11 @@ If you installed this app via npm, below command is available to start app.
 $ open-mstdn-app
 ```
 
-At first, a dialog which recommends to write up config is shown and JSON config file will be shown in your editor. You need to fill up '"name"' and `"host"` keys in `"accounts"`.
+At first, a dialog which recommends to write up config is shown and JSON config file will be open in your editor. You need to fill up `"name"` and `"host"` keys in first element of `"accounts"`.
 
 Then please try to start app again. Usage is the same as web client on mobile devices. Some shortcuts are available by default (please see below 'Customization' section).
+
+Supported platforms are macOS (confirmed with 10.12), Linux (hopefully) and Windows (hopefully).
 
 ## Customization
 
