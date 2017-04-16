@@ -25,7 +25,7 @@ const ShortcutActions = {
     'scroll-up': () => {
         scrollable().scrollTop -= window.innerHeight / 3;
     },
-} as {[action: string]: () => void}
+} as {[action: string]: () => void};
 
 function setupKeybinds(keybinds: {[key: string]: string}, host: string) {
     for (const key in keybinds) {

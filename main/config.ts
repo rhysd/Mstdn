@@ -59,7 +59,7 @@ function showDyingDialog(title: string, detail: string) {
 }
 
 function recommendConfigAndDie(file: string) {
-    const title = 'Please write configuration in JSON'
+    const title = 'Please write configuration in JSON';
     const detail = 'You need to write up name and host in first item of accounts. Restart this app after writing up them. Please see README for more detail: https://github.com/rhysd/Mstdn#readme';
     shell.openItem(file);
     showDyingDialog(title, detail);
@@ -101,7 +101,7 @@ export default function loadConfig(): Promise<Config> {
                 }
             } catch (e) {
                 log.debug('Error on loading JSON file', e);
-                showDyingDialog('Error on loading JSON file', e.message)
+                showDyingDialog('Error on loading JSON file', e.message);
             }
         });
     });

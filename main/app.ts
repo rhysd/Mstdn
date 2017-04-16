@@ -3,7 +3,7 @@ import {app, BrowserWindow, globalShortcut, Tray, shell} from 'electron';
 import windowState = require('electron-window-state');
 import * as menubar from 'menubar';
 import log from './log';
-import {Config, Account} from './config'
+import {Config, Account} from './config';
 
 const IS_DEBUG = process.env.NODE_ENV === 'development';
 const IS_DARWIN = process.platform === 'darwin';
@@ -44,7 +44,7 @@ function trayIcon(color: string) {
     }@2x.png`);
 }
 
-export default function startApp (config: Config) {
+export default function startApp(config: Config) {
     return (config.normal_window ? startNormalWindow : startMenuBar)(config)
         .then(win => new App(win, config));
 }
