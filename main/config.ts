@@ -39,6 +39,7 @@ function makeDefaultConfig(): Config {
             k: 'scroll-up',
             i: 'scroll-top',
             m: 'scroll-bottom',
+            n: '/web/statuses/new',
             1: '/web/timelines/home',
             2: '/web/notifications',
             3: '/web/timelines/public/local',
