@@ -39,12 +39,12 @@ function makeDefaultConfig(): Config {
             k: 'scroll-up',
             i: 'scroll-top',
             m: 'scroll-bottom',
-            n: '/web/statuses/new',
-            1: '/web/timelines/home',
-            2: '/web/notifications',
-            3: '/web/timelines/public/local',
-            4: '/web/timelines/public',
-            5: '/web/getting-started'
+            1: '/web/statuses/new',
+            2: '/web/timelines/home',
+            3: '/web/notifications',
+            4: '/web/timelines/public/local',
+            5: '/web/timelines/public',
+            6: '/web/getting-started'
         },
     };
 }
