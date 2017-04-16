@@ -26,7 +26,7 @@ $ npm install -g mstdn
 
 ### As an isolated app
 
-Download a package archive from [Release page][] (not yet), put unarchived app to proper place, and open it.
+Download a package archive from [Release page][], put unarchived app to proper place, and open it.
 
 ## Usage
 
@@ -75,7 +75,7 @@ Default value is `false` on macOS or Linux, `true` on Windows because window pos
 ### `zoom_factor`
 
 Font zoom factor in application. It should be positive number. For example, `0.7` means `70%` font zooming.
-Default font size is a bit bigger because https://mobile.twitter.com is originally for mobile devices. So default value is `0.9`.
+Default font size is a bit bigger because the UI is originally for mobile devices. So default value is `0.9`.
 
 ### `accounts`
 
@@ -104,4 +104,4 @@ Not yet.
 
 [Mastodon]: https://github.com/tootsuite/mastodon
 [npm]: https://www.npmjs.com/package/mstdn
-[Release page]: https://github.com/rhysd/Mstdn
+[Release page]: https://github.com/rhysd/Mstdn/releases
