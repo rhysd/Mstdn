@@ -9,8 +9,6 @@ const IS_DEBUG = process.env.NODE_ENV === 'development';
 const IS_DARWIN = process.platform === 'darwin';
 const APP_ICON = path.join(__dirname, '..', 'resources', 'icon', 'icon.png');
 const PRELOAD_JS = path.join(__dirname, '..', 'renderer', 'preload.js');
-const DEFAULT_WIDTH = 340;
-const DEFAULT_HEIGHT = 400;
 
 export class App {
     private account: Account;
@@ -148,8 +146,8 @@ function startMenuBar(config: Config): Promise<Electron.BrowserWindow> {
     log.debug('Setup a menubar window');
     return new Promise<Electron.BrowserWindow>(resolve => {
         const state = windowState({
-            defaultWidth: DEFAULT_WIDTH,
-            defaultHeight: DEFAULT_HEIGHT,
+            defaultWidth: 350,
+            defaultHeight: 420,
         });
         const icon = trayIcon(config.icon_color);
         const mb = menubar({
