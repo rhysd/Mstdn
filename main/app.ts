@@ -21,6 +21,9 @@ export class App {
     }
 
     open() {
+        this.win.webContents.on('dom-ready', () => {
+            this.win.show();
+        });
         this.win.loadURL(`https://${this.account.host}${this.account.default_page}`);
         this.win.webContents.on('will-navigate', (e, url) => {
             if (!url.startsWith(`https://${this.account.host}`)) {
@@ -49,7 +52,6 @@ export class App {
                 callback(granted);
             });
         });
-        this.win.show();
     }
 }
 
