@@ -21,6 +21,11 @@ export class App {
     }
 
     open() {
+        if (!IS_DARWIN) {
+            // Users can still access menu bar with pressing Alt key.
+            this.winsetMenu(Menu.getApplicationMenu());
+        }
+
         this.win.webContents.on('dom-ready', () => {
             this.win.show();
         });
