@@ -5,7 +5,7 @@ Web-based Desktop Client for [Mastodon][]
 
 Features:
 
-- [x] Small window on your menubar (or isolated window)
+- [x] Small window on your menubar (or isolated normal window)
 - [x] Desktop notification
 - [x] Customizable shortcut keybinds
 - [ ] Multi-account (switching among accounts)
@@ -94,11 +94,11 @@ Object whose key is a key sequence and whose value is an action name.
 | `scroll-down`      | Scroll down window              | `j`         |
 | `scroll-up`        | Scroll up window                | `k`         |
 | `scroll-top`       | Scroll up to top of window      | `i`         |
-| `scroll-down-page` | Scroll down to bottom of window | `m`         |
+| `scroll-bottom` | Scroll down to bottom of window | `m`         |
 
 If an action name starts with `/`, it will navigate to the path. For example, if you set `"/web/timelines/home"` to some key shortcut and you input the key, browser will navigate page to `https://{your host}/web/timelines/home`.
 
-By default, some key shortcuts are set.
+By default, some key shortcuts for tab items are set in addition to above table.
 
 ## Multi account
 
