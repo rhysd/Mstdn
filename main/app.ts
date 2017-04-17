@@ -1,5 +1,5 @@
 import * as path from 'path';
-import {app, BrowserWindow, globalShortcut, Tray, shell, dialog} from 'electron';
+import {app, BrowserWindow, globalShortcut, Tray, shell, dialog, Menu} from 'electron';
 import windowState = require('electron-window-state');
 import * as menubar from 'menubar';
 import log from './log';
@@ -23,7 +23,7 @@ export class App {
     open() {
         if (!IS_DARWIN) {
             // Users can still access menu bar with pressing Alt key.
-            this.winsetMenu(Menu.getApplicationMenu());
+            this.win.setMenu(Menu.getApplicationMenu());
         }
 
         this.win.webContents.on('dom-ready', () => {
