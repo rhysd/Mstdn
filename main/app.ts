@@ -158,7 +158,6 @@ function startMenuBar(config: Config): Promise<Electron.BrowserWindow> {
             height: state.height,
             alwaysOnTop: IS_DEBUG || !!config.always_on_top,
             tooltip: 'Mstdn',
-            showDockIcon: true,
             autoHideMenuBar: true,
             useContentSize: true,
             show: false,
