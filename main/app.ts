@@ -3,7 +3,9 @@ import {app, BrowserWindow, globalShortcut, Tray, shell, dialog, Menu} from 'ele
 import windowState = require('electron-window-state');
 import * as menubar from 'menubar';
 import log from './log';
-import {Config, Account} from './config';
+import {Config} from './config';
+import AccountSwitcher, {partitionForAccount} from './account_switcher';
+import defaultMenu from './default_menu';
 
 const IS_DEBUG = process.env.NODE_ENV === 'development';
 const IS_DARWIN = process.platform === 'darwin';
@@ -11,27 +13,26 @@ const APP_ICON = path.join(__dirname, '..', 'resources', 'icon', 'icon.png');
 const PRELOAD_JS = path.join(__dirname, '..', 'renderer', 'preload.js');
 
 export class App {
-    private account: Account;
+    private switcher: AccountSwitcher;
 
     constructor(private win: Electron.BrowserWindow, private config: Config) {
         if (config.accounts.length === 0) {
             throw new Error('No account found. Please check the config.');
         }
-        this.account = this.config.accounts[0];
-    }
+        if (IS_DARWIN) {
+            app.dock.setIcon(APP_ICON);
+        }
+        Menu.setApplicationMenu(defaultMenu());
+        this.switcher = new AccountSwitcher(win, this.config.accounts);
+        this.switcher.on('did-switch', () => this.open());
 
-    open() {
         if (!IS_DARWIN) {
             // Users can still access menu bar with pressing Alt key.
             this.win.setMenu(Menu.getApplicationMenu());
         }
 
-        this.win.webContents.on('dom-ready', () => {
-            this.win.show();
-        });
-        this.win.loadURL(`https://${this.account.host}${this.account.default_page}`);
         this.win.webContents.on('will-navigate', (e, url) => {
-            if (!url.startsWith(`https://${this.account.host}`)) {
+            if (!url.startsWith(`https://${this.switcher.current.host}`)) {
                 e.preventDefault();
                 shell.openExternal(url);
             }
@@ -40,6 +41,11 @@ export class App {
             e.preventDefault();
             shell.openExternal(url);
         });
+    }
+
+    open() {
+        this.win.loadURL(`https://${this.switcher.current.host}${this.switcher.current.default_page}`);
+
         this.win.webContents.session.setPermissionRequestHandler((contents, permission, callback) => {
             if (permission !== 'geolocation' && permission !== 'media') {
                 // Granted
@@ -91,6 +97,7 @@ function startNormalWindow(config: Config): Promise<Electron.BrowserWindow> {
                 nodeIntegration: false,
                 sandbox: true,
                 preload: PRELOAD_JS,
+                partition: partitionForAccount(config.accounts[0]),
             },
         });
         win.once('ready-to-show', () => {
@@ -142,7 +149,6 @@ function startNormalWindow(config: Config): Promise<Electron.BrowserWindow> {
         tray.on('double-click', toggleWindow);
         if (IS_DARWIN) {
             tray.setHighlightMode('never');
-            app.dock.setIcon(APP_ICON);
         }
 
         resolve(win);
@@ -163,13 +169,15 @@ function startMenuBar(config: Config): Promise<Electron.BrowserWindow> {
             height: state.height,
             alwaysOnTop: IS_DEBUG || !!config.always_on_top,
             tooltip: 'Mstdn',
-            autoHideMenuBar: true,
             useContentSize: true,
+            autoHideMenuBar: true,
             show: false,
+            showDockIcon: true,
             webPreferences: {
                 nodeIntegration: false,
                 sandbox: true,
                 preload: PRELOAD_JS,
+                partition: partitionForAccount(config.accounts[0]),
             },
         });
         mb.once('ready', () => mb.showWindow());

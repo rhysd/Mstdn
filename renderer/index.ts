@@ -1,5 +1,5 @@
 import * as Mousetrap from 'mousetrap';
-import {Config} from '../main/config';
+import {Config, Account} from '../main/config';
 import * as Ipc from './ipc';
 import log from './log';
 
@@ -52,8 +52,18 @@ function setupKeybinds(keybinds: {[key: string]: string}, host: string) {
     }
 }
 
-Ipc.on('mstdn:config', (config: Config) => {
-    // TODO: Temporary. It should be fixed on supporting multi-account.
+let config: Config | null = null;
+
+Ipc.on('mstdn:config', (c: Config) => {
+    config = c;
     const host = config.accounts[0].host;
     setupKeybinds(config.keymaps, host);
 });
+
+Ipc.on('mstdn:change-account', (account: Account) => {
+    if (config === null) {
+        log.error('FATAL: config is null at receiving mstdn:change-account');
+        return;
+    }
+    setupKeybinds(config.keymaps, account.host);
+})

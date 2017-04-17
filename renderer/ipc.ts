@@ -5,7 +5,7 @@ const ipc = electron.ipcRenderer;
 
 export function on(channel: IpcChannel, callback: (...args: any[]) => void) {
     ipc.on(channel, (...args: any[]) => {
-        log.debug('IPC: Received from:', channel, args);
+        log.info('IPC: Received from:', channel, args);
         callback(...args);
     });
 }
