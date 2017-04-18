@@ -35,7 +35,9 @@ function setupKeybinds(keybinds: {[key: string]: string}, host: string) {
                 const url = `https://${host}${action}`;
                 log.info('URL Shortcut:', url);
                 e.preventDefault();
-                window.location.href = url;
+                if (window.location.href !== url) {
+                    window.location.href = url;
+                }
             });
         } else {
             const func = ShortcutActions[action];
