@@ -36,19 +36,23 @@ export default class Window {
                 e.preventDefault();
                 shell.openExternal(url);
             }
+            log.debug('Opened URL with external browser (will-navigate)', url);
         });
         browser.webContents.on('new-window', (e, url) => {
             e.preventDefault();
             shell.openExternal(url);
+            log.debug('Opened URL with external browser (new-window)', url);
         });
 
         browser.webContents.session.setPermissionRequestHandler((contents, permission, callback) => {
             if (permission !== 'geolocation' && permission !== 'media') {
                 // Granted
+                log.debug('Permission was granted', permission);
                 callback(true);
                 return;
             }
 
+            log.debug('Create dialog for user permission', permission);
             dialog.showMessageBox({
                 type: 'question',
                 buttons: ['Accept', 'Reject'],
@@ -62,10 +66,12 @@ export default class Window {
     }
 
     open(url: string) {
+        log.debug('Open URL:', url);
         this.browser.loadURL(url);
     }
 
     close() {
+        log.debug('Closing window:', this.account);
         this.state.unmanage();
         this.browser.webContents.removeAllListeners();
         this.browser.removeAllListeners();
@@ -216,12 +222,13 @@ function startMenuBar(account: Account, config: Config, bar: Menubar.MenubarApp 
             app.quit();
         });
         if (bar) {
-            log.debug('recreate menubar window with different partition:', account);
+            log.debug('Recreate menubar window with different partition:', account);
             const pref = mb.getOption('webPreferences');
             pref.partition = partitionForAccount(account);
             mb.setOption('webPreferences', pref);
             mb.showWindow();
         } else {
+            log.debug('New menubar instance was created:', account);
             mb.once('ready', () => mb.showWindow());
         }
     });

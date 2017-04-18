@@ -25,17 +25,20 @@ export class App {
     }
 
     start() {
-        const url = `https://${this.switcher.current.host}${this.switcher.current.default_page}`;
+        const a = this.switcher.current;
+        const url = `https://${a.host}${a.default_page}`;
         this.win.open(url);
-        log.debug('Open URL: ', url);
+        log.debug('Application started', a, url);
     }
 
     private onAccountSwitch = (next: Account) => {
         this.win.close();
         if (this.config.hot_key) {
+            log.debug('Disable global shortcut for switching account');
             globalShortcut.unregister(this.config.hot_key);
         }
         Window.create(next, this.config, this.win.menubar) .then(win => {
+            log.debug('Window was recreated again', next);
             this.win = win;
             this.start();
         });
