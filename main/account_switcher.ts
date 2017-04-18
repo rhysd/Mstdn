@@ -1,5 +1,5 @@
 import {EventEmitter} from 'events';
-import {Menu, MenuItem, session} from 'electron';
+import {Menu, MenuItem} from 'electron';
 import log from './log';
 import {Account} from './config';
 
