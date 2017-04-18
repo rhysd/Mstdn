@@ -1,5 +1,5 @@
 import * as Mousetrap from 'mousetrap';
-import {Config} from '../main/config';
+import {Config, Account} from '../main/config';
 import * as Ipc from './ipc';
 import log from './log';
 
@@ -39,7 +39,7 @@ function setupKeybinds(keybinds: {[key: string]: string}, host: string) {
             });
         } else {
             const func = ShortcutActions[action];
-            if (func === undefined) {
+            if (!func) {
                 log.error('Unknown shortcut action:', action);
                 continue;
             }
@@ -52,8 +52,10 @@ function setupKeybinds(keybinds: {[key: string]: string}, host: string) {
     }
 }
 
-Ipc.on('mstdn:config', (config: Config) => {
-    // TODO: Temporary. It should be fixed on supporting multi-account.
-    const host = config.accounts[0].host;
+let config: Config | null = null;
+
+Ipc.on('mstdn:config', (c: Config, a: Account) => {
+    config = c;
+    const host = a.host;
     setupKeybinds(config.keymaps, host);
 });
