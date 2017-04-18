@@ -89,13 +89,13 @@ export default function defaultMenu() {
             submenu: [
                 {
                     label: 'Learn More',
-                    click () {
+                    click() {
                         shell.openExternal('https://github.com/rhysd/Mstdn#readme');
                     }
                 },
                 {
                     label: 'Search Issues',
-                    click () {
+                    click() {
                         shell.openExternal('https://github.com/rhysd/Mstdn/issues');
                     }
                 }

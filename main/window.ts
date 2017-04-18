@@ -61,7 +61,7 @@ export default class Window {
     }
 
     isMenubar() {
-        return this.browser !== null;
+        return this.menubar !== null;
     }
 
     close() {

@@ -39,7 +39,7 @@ function setupKeybinds(keybinds: {[key: string]: string}, host: string) {
             });
         } else {
             const func = ShortcutActions[action];
-            if (func === undefined) {
+            if (!func) {
                 log.error('Unknown shortcut action:', action);
                 continue;
             }
@@ -66,4 +66,4 @@ Ipc.on('mstdn:change-account', (account: Account) => {
         return;
     }
     setupKeybinds(config.keymaps, account.host);
-})
+});
