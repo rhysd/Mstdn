@@ -3,12 +3,16 @@ Web-based Desktop Client for [Mastodon][]
 
 <img src="https://github.com/rhysd/ss/blob/master/Mstdn/main.png?raw=true" width="484" alt="screen shot"/>
 
+Mstdn is a desktop application based on mobile version Mastodon page and [Electron][] framework.
+It basically uses Mastodon's mobile page and provides various desktop application features
+(such as desktop notification, keybinds, multi-account support).
+
 Features:
 
 - [x] Small window on your menubar (or isolated normal window)
 - [x] Desktop notification
 - [x] Customizable shortcut keybinds
-- [ ] Multi-account (switching among accounts)
+- [x] Multi-account (switching among accounts)
 
 Mastodon is an open source project. So if you want to make a new UI, you can just fork the project,
 implement your favorite UI and host it on your place. Then you can participate Mastodon networks from it.
@@ -36,9 +40,11 @@ If you installed this app via npm, below command is available to start app.
 $ open-mstdn-app
 ```
 
-At first, a dialog which recommends to write up config is shown and JSON config file will be open in your editor. You need to fill up `"name"` and `"host"` keys in first element of `"accounts"`.
+At first, a dialog which recommends to write up config is shown and JSON config file will be open in your editor.
+You need to fill up `"name"` and `"host"` keys in first element of `"accounts"`.
 
-Then please try to start app again. Usage is the same as web client on mobile devices. Some shortcuts are available by default (please see below 'Customization' section).
+Then please try to start app again. Usage is the same as web client on mobile devices.
+Some shortcuts are available by default (please see below 'Customization' section).
 
 Supported platforms are macOS (confirmed with 10.12), Linux (hopefully) and Windows (hopefully).
 
@@ -57,7 +63,8 @@ The JSON file can contain below key-values:
 ### `hot_key`
 
 `hot_key` is a key sequence to toggle application window. The shortcut key is defined globally.
-The format is a [Electron's accelerator](https://github.com/electron/electron/blob/master/docs/api/accelerator.md). Please see the document to know how to configure this value.
+The format is a [Electron's accelerator](https://github.com/electron/electron/blob/master/docs/api/accelerator.md).
+Please see the document to know how to configure this value.
 Default value is `"CmdOrCtrl+Shift+S"`. If you want to disable, please set empty string or `null`. 
 
 ### `icon_color`
@@ -81,7 +88,9 @@ Default font size is a bit bigger because the UI is originally for mobile device
 
 ### `accounts`
 
-Array of your accounts. An element should has `"name"`, `"host"` and `"default_page"` keys. `"name"` represents your screen name. `"host"` represents a host part of URL of your mastodon instance. `"default_page"` is a page firstly shown.
+Array of your accounts. An element should has `"name"`, `"host"` and `"default_page"` keys.
+`"name"` represents your screen name. `"host"` represents a host part of URL of your mastodon instance.
+`"default_page"` is a page firstly shown.
 
 You need to write up this config at first.
 
@@ -96,14 +105,22 @@ Object whose key is a key sequence and whose value is an action name.
 | `scroll-top`       | Scroll up to top of window      | `i`         |
 | `scroll-bottom` | Scroll down to bottom of window | `m`         |
 
-If an action name starts with `/`, it will navigate to the path. For example, if you set `"/web/timelines/home"` to some key shortcut and you input the key, browser will navigate page to `https://{your host}/web/timelines/home`.
+If an action name starts with `/`, it will navigate to the path. For example,
+if you set `"/web/timelines/home"` to some key shortcut and you input the key,
+browser will navigate page to `https://{your host}/web/timelines/home`.
 
 By default, some key shortcuts for tab items are set in addition to above table.
 
 ## Multi account
 
-Not yet.
+If you set multiple accounts to `accounts` array in `config.json`, `Accounts` menu item will appear in application menu.
+
+![multi account menu item](https://github.com/rhysd/ss/blob/master/Mstdn/multi-account.png?raw=true)
+
+It will show the list of your account. Check mark is added for current user.
+When you click menu item of non-current user, application window will be rectreated and switch page to the account.
 
 [Mastodon]: https://github.com/tootsuite/mastodon
 [npm]: https://www.npmjs.com/package/mstdn
 [Release page]: https://github.com/rhysd/Mstdn/releases
+[Electron]: electron.atom.io

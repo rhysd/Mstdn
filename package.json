@@ -1,7 +1,7 @@
 {
   "name": "mstdn",
   "productName": "Mstdn",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "description": "Tiny web-based mastodon client for your desktop",
   "main": "main/index.js",
   "bin": {
