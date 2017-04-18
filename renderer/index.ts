@@ -54,16 +54,8 @@ function setupKeybinds(keybinds: {[key: string]: string}, host: string) {
 
 let config: Config | null = null;
 
-Ipc.on('mstdn:config', (c: Config) => {
+Ipc.on('mstdn:config', (c: Config, a: Account) => {
     config = c;
-    const host = config.accounts[0].host;
+    const host = a.host;
     setupKeybinds(config.keymaps, host);
-});
-
-Ipc.on('mstdn:change-account', (account: Account) => {
-    if (config === null) {
-        log.error('FATAL: config is null at receiving mstdn:change-account');
-        return;
-    }
-    setupKeybinds(config.keymaps, account.host);
 });

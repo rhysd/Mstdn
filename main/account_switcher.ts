@@ -11,7 +11,7 @@ export default class AccountSwitcher extends EventEmitter {
     accounts: Account[];
     current: Account;
 
-    constructor(private win: Electron.BrowserWindow, accounts: Account[]) {
+    constructor(accounts: Account[]) {
         super();
         const submenu = [] as Electron.MenuItemOptions[];
 
@@ -25,7 +25,7 @@ export default class AccountSwitcher extends EventEmitter {
                 label: name,
                 type: 'radio',
                 checked: false,
-                click: () => this.switchAccountTo(account),
+                click: () => this.switchTo(account),
             });
         }
 
@@ -49,18 +49,13 @@ export default class AccountSwitcher extends EventEmitter {
         Menu.setApplicationMenu(menu);
     }
 
-    switchAccountTo(account: Account) {
+    switchTo(account: Account) {
         if (this.current.name === account.name && this.current.host === account.host) {
             log.debug('Current account is already @' + account.name);
             return;
         }
         log.debug('Switch to account', account);
-        this.emit('will-switch', account);
-
-        log.error('TODO: Switch partition');
-
-        this.win.webContents.send('mstdn:change-account', account);
-        this.emit('did-switch', account);
+        this.emit('switch', account, this.current);
         this.current = account;
     }
 }

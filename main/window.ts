@@ -12,12 +12,17 @@ const APP_ICON = path.join(__dirname, '..', 'resources', 'icon', 'icon.png');
 const PRELOAD_JS = path.join(__dirname, '..', 'renderer', 'preload.js');
 
 export default class Window {
-    static create(config: Config) {
-        return (config.normal_window ? startNormalWindow : startMenuBar)(config);
+    static create(account: Account, config: Config, mb: Menubar.MenubarApp | null = null) {
+        if (config.normal_window) {
+            return startNormalWindow(account, config);
+        } else {
+            return startMenuBar(account, config, mb);
+        }
     }
 
     constructor(
         public browser: Electron.BrowserWindow,
+        public state: any /*XXX: ElectronWindowState.WindowState */,
         public account: Account,
         public menubar: Menubar.MenubarApp | null,
     ) {
@@ -60,12 +65,16 @@ export default class Window {
         this.browser.loadURL(url);
     }
 
-    isMenubar() {
-        return this.menubar !== null;
-    }
-
     close() {
-        log.error('TODO: close window');
+        this.state.unmanage();
+        this.browser.webContents.removeAllListeners();
+        this.browser.removeAllListeners();
+        if (this.menubar) {
+            // Note:
+            // menubar.windowClear() won't be called because all listners was removed
+            delete this.menubar.window;
+        }
+        this.browser.close();
     }
 }
 
@@ -75,14 +84,13 @@ function trayIcon(color: string) {
     }@2x.png`);
 }
 
-function startNormalWindow(config: Config): Promise<Window> {
+function startNormalWindow(account: Account, config: Config): Promise<Window> {
     log.debug('Setup a normal window');
     return new Promise<Window>(resolve => {
         const state = windowState({
             defaultWidth: 600,
             defaultHeight: 800,
         });
-        const account = config.accounts[0];
         const win = new BrowserWindow({
             width: state.width,
             height: state.height,
@@ -129,7 +137,7 @@ function startNormalWindow(config: Config): Promise<Window> {
 
         win.webContents.on('dom-ready', () => {
             log.debug('Send config to renderer procress');
-            win.webContents.send('mstdn:config', config);
+            win.webContents.send('mstdn:config', config, account);
         });
         win.webContents.once('dom-ready', () => {
             log.debug('Normal window application was launched');
@@ -150,20 +158,19 @@ function startNormalWindow(config: Config): Promise<Window> {
             tray.setHighlightMode('never');
         }
 
-        resolve(new Window(win, account, null));
+        resolve(new Window(win, state, account, null));
     });
 }
 
-function startMenuBar(config: Config): Promise<Window> {
+function startMenuBar(account: Account, config: Config, bar: Menubar.MenubarApp | null): Promise<Window> {
     log.debug('Setup a menubar window');
     return new Promise<Window>(resolve => {
         const state = windowState({
             defaultWidth: 350,
             defaultHeight: 420,
         });
-        const account = config.accounts[0];
         const icon = trayIcon(config.icon_color);
-        const mb = menubar({
+        const mb = bar || menubar({
             icon,
             width: state.width,
             height: state.height,
@@ -180,7 +187,6 @@ function startMenuBar(config: Config): Promise<Window> {
                 partition: partitionForAccount(account),
             },
         });
-        mb.once('ready', () => mb.showWindow());
         mb.once('after-create-window', () => {
             log.debug('Menubar application was launched');
             if (config.hot_key) {
@@ -200,15 +206,24 @@ function startMenuBar(config: Config): Promise<Window> {
             }
             mb.window.webContents.on('dom-ready', () => {
                 log.debug('Send config to renderer procress');
-                mb.window.webContents.send('mstdn:config', config);
+                mb.window.webContents.send('mstdn:config', config, account);
             });
             state.manage(mb.window);
 
-            resolve(new Window(mb.window, account, mb));
+            resolve(new Window(mb.window, state, account, mb));
         });
         mb.once('after-close', () => {
             app.quit();
         });
+        if (bar) {
+            log.debug('recreate menubar window with different partition:', account);
+            const pref = mb.getOption('webPreferences');
+            pref.partition = partitionForAccount(account);
+            mb.setOption('webPreferences', pref);
+            mb.showWindow();
+        } else {
+            mb.once('ready', () => mb.showWindow());
+        }
     });
 }
 

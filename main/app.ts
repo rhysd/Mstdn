@@ -1,7 +1,7 @@
 import * as path from 'path';
-import {app, Menu} from 'electron';
+import {app, Menu, globalShortcut} from 'electron';
 import log from './log';
-import {Config} from './config';
+import {Config, Account} from './config';
 import AccountSwitcher from './account_switcher';
 import defaultMenu from './default_menu';
 import Window from './window';
@@ -20,17 +20,30 @@ export class App {
             app.dock.setIcon(APP_ICON);
         }
         Menu.setApplicationMenu(defaultMenu());
-        this.switcher = new AccountSwitcher(win.browser, this.config.accounts);
-        this.switcher.on('did-switch', () => this.open());
+        this.switcher = new AccountSwitcher(this.config.accounts);
+        this.switcher.on('switch', this.onAccountSwitch);
     }
 
-    open() {
+    start() {
         const url = `https://${this.switcher.current.host}${this.switcher.current.default_page}`;
         this.win.open(url);
         log.debug('Open URL: ', url);
     }
+
+    private onAccountSwitch = (next: Account) => {
+        this.win.close();
+        if (this.config.hot_key) {
+            globalShortcut.unregister(this.config.hot_key);
+        }
+        Window.create(next, this.config, this.win.menubar) .then(win => {
+            this.win = win;
+            this.start();
+        });
+    }
 }
 
 export default function startApp(config: Config) {
-    return Window.create(config).then(win => new App(win, config));
+    const default_account = config.accounts[0];
+    return Window.create(default_account, config)
+        .then(win => new App(win, config));
 }
