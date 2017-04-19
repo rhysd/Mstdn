@@ -108,7 +108,7 @@ function startNormalWindow(account: Account, config: Config): Promise<Window> {
             icon: APP_ICON,
             show: false,
             useContentSize: true,
-            autoHideMenuBar: false,
+            autoHideMenuBar: config.hide_menu,
             webPreferences: {
                 nodeIntegration: false,
                 sandbox: true,
