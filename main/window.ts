@@ -1,15 +1,10 @@
-import * as path from 'path';
 import {app, BrowserWindow, globalShortcut, shell, dialog, Menu} from 'electron';
 import windowState = require('electron-window-state');
 import * as menubar from 'menubar';
 import {Config, Account} from './config';
 import {partitionForAccount} from './account_switcher';
 import log from './log';
-
-const IS_DEBUG = process.env.NODE_ENV === 'development';
-const IS_DARWIN = process.platform === 'darwin';
-const APP_ICON = path.join(__dirname, '..', 'resources', 'icon', 'icon.png');
-const PRELOAD_JS = path.join(__dirname, '..', 'renderer', 'preload.js');
+import {IS_DEBUG, IS_DARWIN, APP_ICON, PRELOAD_JS, trayIcon} from './common';
 
 export default class Window {
     static create(account: Account, config: Config, mb: Menubar.MenubarApp | null = null) {
@@ -82,12 +77,6 @@ export default class Window {
         }
         this.browser.close();
     }
-}
-
-function trayIcon(color: string) {
-    return path.join(__dirname, '..', 'resources', 'icon', `tray-icon-${
-        color === 'white' ? 'white' : 'black'
-    }@2x.png`);
 }
 
 function startNormalWindow(account: Account, config: Config): Promise<Window> {

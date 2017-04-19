@@ -1,19 +1,10 @@
-import * as path from 'path';
 import {app, Menu, globalShortcut, Tray} from 'electron';
 import log from './log';
 import {Config, Account} from './config';
 import AccountSwitcher from './account_switcher';
 import defaultMenu from './default_menu';
 import Window from './window';
-
-const IS_DARWIN = process.platform === 'darwin';
-const APP_ICON = path.join(__dirname, '..', 'resources', 'icon', 'icon.png');
-
-function trayIcon(color: string) {
-    return path.join(__dirname, '..', 'resources', 'icon', `tray-icon-${
-        color === 'white' ? 'white' : 'black'
-    }@2x.png`);
-}
+import {IS_DARWIN, APP_ICON, trayIcon} from './common';
 
 export class App {
     private switcher: AccountSwitcher;

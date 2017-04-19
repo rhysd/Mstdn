@@ -1,7 +1,7 @@
 import {app, systemPreferences, dialog, shell} from 'electron';
 import * as fs from 'fs';
-import {join} from 'path';
 import log from './log';
+import {CONFIG_FILE} from './common';
 
 export interface Account {
     host: string;
@@ -68,22 +68,20 @@ function recommendConfigAndDie(file: string) {
 
 export default function loadConfig(): Promise<Config> {
     return new Promise<Config>(resolve => {
-        const dir = app.getPath('userData');
-        const file = join(dir, 'config.json');
-        fs.readFile(file, 'utf8', (err, json) => {
+        fs.readFile(CONFIG_FILE, 'utf8', (err, json) => {
             if (err) {
-                log.info('Configuration file was not found, will create:', file);
+                log.info('Configuration file was not found, will create:', CONFIG_FILE);
                 const default_config = makeDefaultConfig();
                 // Note:
                 // If calling writeFile() directly here, it tries to create config file before Electron
                 // runtime creates data directory. As the result, writeFile() would fail to create a file.
                 if (app.isReady()) {
-                    fs.writeFileSync(file, JSON.stringify(default_config, null, 2));
-                    recommendConfigAndDie(file);
+                    fs.writeFileSync(CONFIG_FILE, JSON.stringify(default_config, null, 2));
+                    recommendConfigAndDie(CONFIG_FILE);
                 } else {
                     app.once('ready', () => {
-                        fs.writeFileSync(file, JSON.stringify(default_config, null, 2));
-                        recommendConfigAndDie(file);
+                        fs.writeFileSync(CONFIG_FILE, JSON.stringify(default_config, null, 2));
+                        recommendConfigAndDie(CONFIG_FILE);
                     });
                 }
                 return;
@@ -96,7 +94,7 @@ export default function loadConfig(): Promise<Config> {
                 }
                 log.debug('Configuration was loaded successfully', config);
                 if (!config.accounts || config.accounts[0].host === '' || config.accounts[0].name === '') {
-                    recommendConfigAndDie(file);
+                    recommendConfigAndDie(CONFIG_FILE);
                 } else {
                     resolve(config);
                 }
