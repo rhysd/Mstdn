@@ -40,7 +40,13 @@ export default class Window {
         });
 
         browser.webContents.session.setPermissionRequestHandler((contents, permission, callback) => {
-            if (permission !== 'geolocation' && permission !== 'media') {
+            const url = contents.getURL();
+            const grantedByDefault =
+                url.startsWith(`https://${this.account.host}`) &&
+                permission !== 'geolocation' &&
+                permission !== 'media';
+
+            if (grantedByDefault) {
                 // Granted
                 log.debug('Permission was granted', permission);
                 callback(true);
@@ -51,7 +57,7 @@ export default class Window {
             dialog.showMessageBox({
                 type: 'question',
                 buttons: ['Accept', 'Reject'],
-                message: `Permission '${permission}' is requested by ${contents.getURL()}`,
+                message: `Permission '${permission}' is requested by ${url}`,
                 detail: "Please choose one of 'Accept' or 'Reject'",
             }, (buttonIndex: number) => {
                 const granted = buttonIndex === 0;
