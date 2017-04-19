@@ -13,6 +13,7 @@ export interface Config {
     hot_key: string;
     icon_color: string;
     always_on_top: boolean;
+    menubar: boolean;
     normal_window: boolean;
     zoom_factor: number;
     accounts: Account[];
@@ -27,6 +28,7 @@ function makeDefaultConfig(): Config {
         hot_key: 'CmdOrCtrl+Shift+S',
         icon_color: IsDarkMode ? 'white' : 'black',
         always_on_top: false,
+        menubar: true,
         normal_window: menubarBroken,
         zoom_factor: 0.9,
         accounts: [{
