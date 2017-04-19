@@ -24,6 +24,13 @@ export class App {
         this.setupHotkey();
     }
 
+    start() {
+        const a = this.switcher.current;
+        const url = `https://${a.host}${a.default_page}`;
+        this.win.open(url);
+        log.debug('Application started', a, url);
+    }
+
     private setupHotkey() {
         if (!this.config.hot_key) {
             return;
@@ -44,13 +51,6 @@ export class App {
             globalShortcut.register(this.config.hot_key, this.toggleNormalWindow);
         }
         log.debug('Hot key was set to:', this.config.hot_key);
-    }
-
-    start() {
-        const a = this.switcher.current;
-        const url = `https://${a.host}${a.default_page}`;
-        this.win.open(url);
-        log.debug('Application started', a, url);
     }
 
     private setupTray() {
