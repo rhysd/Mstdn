@@ -5,6 +5,5 @@ if (process.env.NODE_ENV === 'development') {
 } else {
     log.setLevel('info');
 }
-log.setLevel('debug');
 
 export default log;
