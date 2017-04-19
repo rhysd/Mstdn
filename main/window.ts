@@ -4,7 +4,7 @@ import * as menubar from 'menubar';
 import {Config, Account} from './config';
 import {partitionForAccount} from './account_switcher';
 import log from './log';
-import {IS_DEBUG, IS_DARWIN, APP_ICON, PRELOAD_JS, trayIcon} from './common';
+import {IS_DEBUG, IS_DARWIN, IS_WINDOWS, APP_ICON, PRELOAD_JS, trayIcon} from './common';
 
 export default class Window {
     static create(account: Account, config: Config, mb: Menubar.MenubarApp | null = null) {
@@ -34,6 +34,11 @@ export default class Window {
             log.debug('Opened URL with external browser (will-navigate)', url);
         });
         browser.webContents.on('new-window', (e, url) => {
+            if (IS_WINDOWS) {
+                // XXX:
+                // On Windows, rel="noopener" lets app crash on preventing the event.
+                return;
+            }
             e.preventDefault();
             shell.openExternal(url);
             log.debug('Opened URL with external browser (new-window)', url);

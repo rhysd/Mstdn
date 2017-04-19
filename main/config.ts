@@ -1,7 +1,7 @@
 import {app, systemPreferences, dialog, shell} from 'electron';
 import * as fs from 'fs';
 import log from './log';
-import {CONFIG_FILE} from './common';
+import {CONFIG_FILE, IS_DARWIN, IS_WINDOWS} from './common';
 
 export interface Account {
     host: string;
@@ -20,8 +20,8 @@ export interface Config {
 }
 
 function makeDefaultConfig(): Config {
-    const IsDarkMode = (process.platform === 'darwin') && systemPreferences.isDarkMode();
-    const menubarBroken = process.platform === 'win32';
+    const IsDarkMode = IS_DARWIN && systemPreferences.isDarkMode();
+    const menubarBroken = IS_WINDOWS;
 
     return {
         hot_key: 'CmdOrCtrl+Shift+S',
