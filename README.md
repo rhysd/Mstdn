@@ -98,18 +98,65 @@ You need to write up this config at first.
 
 Object whose key is a key sequence and whose value is an action name.
 
-| Action Name        | Description                     | Default Key |
-|--------------------|---------------------------------|-------------|
-| `scroll-down`      | Scroll down window              | `j`         |
-| `scroll-up`        | Scroll up window                | `k`         |
-| `scroll-top`       | Scroll up to top of window      | `i`         |
+| Action Name     | Description                     | Default Key |
+|-----------------|---------------------------------|-------------|
+| `scroll-down`   | Scroll down window              | `j`         |
+| `scroll-up`     | Scroll up window                | `k`         |
+| `scroll-top`    | Scroll up to top of window      | `i`         |
 | `scroll-bottom` | Scroll down to bottom of window | `m`         |
+| `next-account`  | Switch to next account          | N/A         |
+| `prev-account`  | Switch to previous account      | N/A         |
 
 If an action name starts with `/`, it will navigate to the path. For example,
 if you set `"/web/timelines/home"` to some key shortcut and you input the key,
 browser will navigate page to `https://{your host}/web/timelines/home`.
 
 By default, some key shortcuts for tab items are set in addition to above table.
+
+<details>
+<summary> Example of configuration </summary>
+<pre><code>
+{
+  "hot_key": "F8",
+  "icon_color": "black",
+  "always_on_top": false,
+  "normal_window": false,
+  "zoom_factor": 0.9,
+  "accounts": [
+    {
+      "name": "Linda_pp",
+      "host": "mstdn.jp",
+      "default_page": "/web/timelines/home"
+    },
+    {
+      "name": "inudog",
+      "host": "mastodon.social",
+      "default_page": "/web/timelines/home"
+    }
+  ],
+  "keymaps": {
+    "1": "/web/statuses/new",
+    "2": "/web/timelines/home",
+    "3": "/web/notifications",
+    "4": "/web/timelines/public/local",
+    "5": "/web/timelines/public",
+    "6": "/web/getting-started",
+    "ctrl+1": "/web/statuses/new",
+    "ctrl+2": "/web/timelines/home",
+    "ctrl+3": "/web/notifications",
+    "ctrl+4": "/web/timelines/public/local",
+    "ctrl+5": "/web/timelines/public",
+    "ctrl+6": "/web/getting-started",
+    "j": "scroll-down",
+    "k": "scroll-up",
+    "i": "scroll-top",
+    "m": "scroll-bottom",
+    "n": "next-account",
+    "p": "prev-account"
+  }
+}
+</code></pre>
+</details>
 
 ## Multi account
 
@@ -118,7 +165,7 @@ If you set multiple accounts to `accounts` array in `config.json`, `Accounts` me
 ![multi account menu item](https://github.com/rhysd/ss/blob/master/Mstdn/multi-account.png?raw=true)
 
 It will show the list of your account. Check mark is added for current user.
-When you click menu item of non-current user, application window will be rectreated and switch page to the account.
+When you click menu item of non-current user, application window will be recreated and switch page to the account.
 
 [Mastodon]: https://github.com/tootsuite/mastodon
 [npm]: https://www.npmjs.com/package/mstdn

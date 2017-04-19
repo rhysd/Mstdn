@@ -1,4 +1,8 @@
-type IpcChannel
+type IpcChannelFromMain
     = 'mstdn:config'
-    | 'mstdn:change-account'
+;
+
+type IpcChannelFromRenderer
+    = 'mstdn:next-account'
+    | 'mstdn:prev-account'
 ;

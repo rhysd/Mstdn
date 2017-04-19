@@ -42,6 +42,12 @@ const ShortcutActions = {
     'scroll-up': () => {
         scrollable().scrollTop -= window.innerHeight / 3;
     },
+    'next-account': () => {
+        Ipc.send('mstdn:next-account');
+    },
+    'prev-account': () => {
+        Ipc.send('mstdn:prev-account');
+    },
 } as {[action: string]: () => void};
 
 function setupKeybinds(keybinds: {[key: string]: string}, host: string) {

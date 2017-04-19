@@ -1,5 +1,5 @@
 import {EventEmitter} from 'events';
-import {Menu, MenuItem} from 'electron';
+import {Menu, MenuItem, ipcMain as ipc} from 'electron';
 import log from './log';
 import {Account} from './config';
 
@@ -49,6 +49,9 @@ export default class AccountSwitcher extends EventEmitter {
             menu.insert(menu.items.length - 1, item);
             Menu.setApplicationMenu(menu);
         }
+
+        ipc.on('mstdn:next-account' as IpcChannelFromRenderer, this.switchToNext);
+        ipc.on('mstdn:prev-account' as IpcChannelFromRenderer, this.switchToPrev);
     }
 
     switchTo(account: Account) {
@@ -59,5 +62,42 @@ export default class AccountSwitcher extends EventEmitter {
         log.debug('Switch to account', account);
         this.emit('switch', account, this.current);
         this.current = account;
+    }
+
+    getAccountIndex(account: Account) {
+        for (let i = 0; i < this.accounts.length; ++i) {
+            const a = this.accounts[i];
+            if (a.name === account.name && a.host === account.host) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    switchToNext = () => {
+        if (this.accounts.length <= 1) {
+            log.debug('Skip switching account: Only one account is registered');
+            return;
+        }
+        let idx = this.getAccountIndex(this.current) + 1;
+        if (idx >= this.accounts.length) {
+            idx = 0;
+        }
+        log.debug('Switch to next account');
+        this.switchTo(this.accounts[idx]);
+    }
+
+    switchToPrev = () => {
+        if (this.accounts.length <= 1) {
+            log.debug('Skip switching account: Only one account is registered');
+            return;
+        }
+        let idx = this.getAccountIndex(this.current);
+        if (idx <= 0) {
+            idx = this.accounts.length;
+        }
+        --idx;
+        log.debug('Switch to prev account');
+        this.switchTo(this.accounts[idx]);
     }
 }
