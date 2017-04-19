@@ -81,11 +81,11 @@ When this value is set to `true`, application will be launched as a normal windo
 If menu bar behavior does not work for you, please use set this value to `true` to avoid it.
 Default value is `false` on macOS or Linux, `true` on Windows because window position is broken in some version of Windows.
 
-### `menubar`
+### `hide_menu`
 
 When this value is set to `true`, the application will be launched with the
-menubar visible, assuming `normal_window` is also true. When set to `false`, the
-menubar will be hidden on launch. Default value is `true`.
+menubar hidden, assuming `normal_window` is also true. When set to `false`, the
+menubar will be visible on launch. Default value is `false`.
 
 ### `zoom_factor`
 
