@@ -1,4 +1,4 @@
-import {app, BrowserWindow, globalShortcut, shell, dialog, Menu} from 'electron';
+import {app, BrowserWindow, shell, dialog, Menu} from 'electron';
 import windowState = require('electron-window-state');
 import * as menubar from 'menubar';
 import {Config, Account} from './config';
@@ -116,30 +116,12 @@ function startNormalWindow(account: Account, config: Config): Promise<Window> {
         }
         state.manage(win);
 
-        const toggleWindow = () => {
-            if (win.isFocused()) {
-                log.debug('Toggle window: shown -> hidden');
-                if (IS_DARWIN) {
-                    app.hide();
-                } else {
-                    win.hide();
-                }
-            } else {
-                log.debug('Toggle window: hidden -> shown');
-                win.show();
-            }
-        };
-
         win.webContents.on('dom-ready', () => {
             log.debug('Send config to renderer procress');
             win.webContents.send('mstdn:config', config, account);
         });
         win.webContents.once('dom-ready', () => {
             log.debug('Normal window application was launched');
-            if (config.hot_key) {
-                globalShortcut.register(config.hot_key, toggleWindow);
-                log.debug('Hot key was set to:', config.hot_key);
-            }
             if (IS_DEBUG) {
                 win.webContents.openDevTools({mode: 'detach'});
             }
@@ -176,18 +158,6 @@ function startMenuBar(account: Account, config: Config, bar: Menubar.MenubarApp 
         });
         mb.once('after-create-window', () => {
             log.debug('Menubar application was launched');
-            if (config.hot_key) {
-                globalShortcut.register(config.hot_key, () => {
-                    if (mb.window.isFocused()) {
-                        log.debug('Toggle window: shown -> hidden');
-                        mb.hideWindow();
-                    } else {
-                        log.debug('Toggle window: hidden -> shown');
-                        mb.showWindow();
-                    }
-                });
-                log.debug('Hot key was set to:', config.hot_key);
-            }
             if (IS_DEBUG) {
                 mb.window.webContents.openDevTools({mode: 'detach'});
             }

@@ -20,32 +20,30 @@ export class App {
         this.switcher = new AccountSwitcher(this.config.accounts);
         this.switcher.on('switch', this.onAccountSwitch);
 
-        if (!win.menubar) {
-            // Note:
-            // If it's menubar window, tray will be put in menubar().
-            const toggleWindow = () => {
-                const win = this.win.browser;
-                if (win.isFocused()) {
+        this.setupTray();
+        this.setupHotkey();
+    }
+
+    private setupHotkey() {
+        if (!this.config.hot_key) {
+            return;
+        }
+
+        if (this.win.menubar) {
+            globalShortcut.register(this.config.hot_key, () => {
+                const mb = this.win.menubar!;
+                if (mb.window.isFocused()) {
                     log.debug('Toggle window: shown -> hidden');
-                    if (IS_DARWIN) {
-                        app.hide();
-                    } else {
-                        win.hide();
-                    }
+                    mb.hideWindow();
                 } else {
                     log.debug('Toggle window: hidden -> shown');
-                    win.show();
+                    mb.showWindow();
                 }
-            };
-
-            const icon = trayIcon(config.icon_color);
-            const tray = new Tray(icon);
-            tray.on('click', toggleWindow);
-            tray.on('double-click', toggleWindow);
-            if (IS_DARWIN) {
-                tray.setHighlightMode('never');
-            }
+            });
+        } else {
+            globalShortcut.register(this.config.hot_key, this.toggleNormalWindow);
         }
+        log.debug('Hot key was set to:', this.config.hot_key);
     }
 
     start() {
@@ -55,13 +53,40 @@ export class App {
         log.debug('Application started', a, url);
     }
 
+    private setupTray() {
+        if (this.win.menubar) {
+            // Note:
+            // If it's menubar window, tray will be put in menubar().
+            return;
+        }
+
+        const icon = trayIcon(this.config.icon_color);
+        const tray = new Tray(icon);
+        tray.on('click', this.toggleNormalWindow);
+        tray.on('double-click', this.toggleNormalWindow);
+        if (IS_DARWIN) {
+            tray.setHighlightMode('never');
+        }
+    }
+
+    private toggleNormalWindow = () => {
+        const win = this.win.browser;
+        if (win.isFocused()) {
+            log.debug('Toggle window: shown -> hidden');
+            if (IS_DARWIN) {
+                app.hide();
+            } else {
+                win.hide();
+            }
+        } else {
+            log.debug('Toggle window: hidden -> shown');
+            win.show();
+        }
+    }
+
     private onAccountSwitch = (next: Account) => {
         this.win.close();
-        if (this.config.hot_key) {
-            log.debug('Disable global shortcut for switching account');
-            globalShortcut.unregister(this.config.hot_key);
-        }
-        Window.create(next, this.config, this.win.menubar) .then(win => {
+        Window.create(next, this.config, this.win.menubar).then(win => {
             log.debug('Window was recreated again', next);
             this.win = win;
             this.start();
