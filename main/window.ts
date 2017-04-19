@@ -1,5 +1,5 @@
 import * as path from 'path';
-import {app, BrowserWindow, globalShortcut, Tray, shell, dialog, Menu} from 'electron';
+import {app, BrowserWindow, globalShortcut, shell, dialog, Menu} from 'electron';
 import windowState = require('electron-window-state');
 import * as menubar from 'menubar';
 import {Config, Account} from './config';
@@ -155,14 +155,6 @@ function startNormalWindow(account: Account, config: Config): Promise<Window> {
                 win.webContents.openDevTools({mode: 'detach'});
             }
         });
-
-        const normalIcon = trayIcon(config.icon_color);
-        const tray = new Tray(normalIcon);
-        tray.on('click', toggleWindow);
-        tray.on('double-click', toggleWindow);
-        if (IS_DARWIN) {
-            tray.setHighlightMode('never');
-        }
 
         resolve(new Window(win, state, account, null));
     });

@@ -44,9 +44,11 @@ export default class AccountSwitcher extends EventEmitter {
         });
 
         const menu = Menu.getApplicationMenu();
-        // Insert item before 'Help'
-        menu.insert(menu.items.length - 1, item);
-        Menu.setApplicationMenu(menu);
+        if (menu !== null) {
+            // Insert item before 'Help'
+            menu.insert(menu.items.length - 1, item);
+            Menu.setApplicationMenu(menu);
+        }
     }
 
     switchTo(account: Account) {

@@ -1,5 +1,5 @@
 import * as path from 'path';
-import {app, Menu, globalShortcut} from 'electron';
+import {app, Menu, globalShortcut, Tray} from 'electron';
 import log from './log';
 import {Config, Account} from './config';
 import AccountSwitcher from './account_switcher';
@@ -8,6 +8,12 @@ import Window from './window';
 
 const IS_DARWIN = process.platform === 'darwin';
 const APP_ICON = path.join(__dirname, '..', 'resources', 'icon', 'icon.png');
+
+function trayIcon(color: string) {
+    return path.join(__dirname, '..', 'resources', 'icon', `tray-icon-${
+        color === 'white' ? 'white' : 'black'
+    }@2x.png`);
+}
 
 export class App {
     private switcher: AccountSwitcher;
@@ -22,6 +28,33 @@ export class App {
         Menu.setApplicationMenu(defaultMenu());
         this.switcher = new AccountSwitcher(this.config.accounts);
         this.switcher.on('switch', this.onAccountSwitch);
+
+        if (!win.menubar) {
+            // Note:
+            // If it's menubar window, tray will be put in menubar().
+            const toggleWindow = () => {
+                const win = this.win.browser;
+                if (win.isFocused()) {
+                    log.debug('Toggle window: shown -> hidden');
+                    if (IS_DARWIN) {
+                        app.hide();
+                    } else {
+                        win.hide();
+                    }
+                } else {
+                    log.debug('Toggle window: hidden -> shown');
+                    win.show();
+                }
+            };
+
+            const icon = trayIcon(config.icon_color);
+            const tray = new Tray(icon);
+            tray.on('click', toggleWindow);
+            tray.on('double-click', toggleWindow);
+            if (IS_DARWIN) {
+                tray.setHighlightMode('never');
+            }
+        }
     }
 
     start() {
