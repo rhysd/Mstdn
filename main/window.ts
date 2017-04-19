@@ -4,7 +4,9 @@ import * as menubar from 'menubar';
 import {Config, Account} from './config';
 import {partitionForAccount} from './account_switcher';
 import log from './log';
-import {IS_DEBUG, IS_DARWIN, IS_WINDOWS, APP_ICON, PRELOAD_JS, trayIcon} from './common';
+import {IS_DEBUG, IS_DARWIN, IS_WINDOWS, IS_LINUX, APP_ICON, PRELOAD_JS, trayIcon} from './common';
+
+const ELECTRON_ISSUE_9230 = IS_WINDOWS || IS_LINUX;
 
 export default class Window {
     static create(account: Account, config: Config, mb: Menubar.MenubarApp | null = null) {
@@ -34,9 +36,10 @@ export default class Window {
             log.debug('Opened URL with external browser (will-navigate)', url);
         });
         browser.webContents.on('new-window', (e, url) => {
-            if (IS_WINDOWS) {
+            if (ELECTRON_ISSUE_9230) {
                 // XXX:
-                // On Windows, rel="noopener" lets app crash on preventing the event.
+                // On Windows or Linux, rel="noopener" lets app crash on preventing the event.
+                // Issue: https://github.com/electron/electron/issues/9230
                 return;
             }
             e.preventDefault();
