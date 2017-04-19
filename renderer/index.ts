@@ -12,6 +12,23 @@ function scrollable() {
     return scrollable;
 }
 
+function navigateTo(host: string, path: string) {
+    const url = `https://${host}${path}`;
+    if (window.location.href === url) {
+        log.info('Current URL is already', url);
+        return;
+    }
+
+    const link = document.querySelector(`a[href="${path}"]`);
+    if (link) {
+        log.info('Click link by shortcut', path);
+        (link as HTMLAnchorElement).click();
+    } else {
+        log.info('Force navigation by shortcut', path);
+        window.location.href = url;
+    }
+}
+
 const ShortcutActions = {
     'scroll-top': () => {
         scrollable().scrollTop = 0;
@@ -32,12 +49,8 @@ function setupKeybinds(keybinds: {[key: string]: string}, host: string) {
         const action = keybinds[key];
         if (action.startsWith('/')) {
             Mousetrap.bind(key, e => {
-                const url = `https://${host}${action}`;
-                log.info('URL Shortcut:', url);
                 e.preventDefault();
-                if (window.location.href !== url) {
-                    window.location.href = url;
-                }
+                navigateTo(host, action);
             });
         } else {
             const func = ShortcutActions[action];
@@ -58,6 +71,5 @@ let config: Config | null = null;
 
 Ipc.on('mstdn:config', (c: Config, a: Account) => {
     config = c;
-    const host = a.host;
-    setupKeybinds(config.keymaps, host);
+    setupKeybinds(config.keymaps, a.host);
 });
