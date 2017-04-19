@@ -87,6 +87,8 @@ When this value is set to `true`, the application will be launched with the
 menubar hidden, assuming `normal_window` is also true. When set to `false`, the
 menubar will be visible on launch. Default value is `false`.
 
+On Windows, typing Alt key shows the hidden menubar.
+
 ### `zoom_factor`
 
 Font zoom factor in application. It should be positive number. For example, `0.7` means `70%` font zooming.

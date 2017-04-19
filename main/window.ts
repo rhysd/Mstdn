@@ -160,7 +160,7 @@ function startMenuBar(account: Account, config: Config, bar: Menubar.MenubarApp 
             alwaysOnTop: IS_DEBUG || !!config.always_on_top,
             tooltip: 'Mstdn',
             useContentSize: true,
-            autoHideMenuBar: false,
+            autoHideMenuBar: config.hide_menu,
             show: false,
             showDockIcon: true,
             webPreferences: {
