@@ -46,7 +46,7 @@ You need to fill up `"name"` and `"host"` keys in first element of `"accounts"`.
 Then please try to start app again. Usage is the same as web client on mobile devices.
 Some shortcuts are available by default (please see below 'Customization' section).
 
-Supported platforms are macOS (confirmed with 10.12), Linux (hopefully) and Windows (hopefully).
+Supported platforms are macOS (confirmed with 10.12), Linux (hopefully) and Windows (confirmed with Windows 8.1).
 
 ## Customization
 

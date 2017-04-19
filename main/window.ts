@@ -100,7 +100,7 @@ function startNormalWindow(account: Account, config: Config): Promise<Window> {
             icon: APP_ICON,
             show: false,
             useContentSize: true,
-            autoHideMenuBar: true,
+            autoHideMenuBar: false,
             webPreferences: {
                 nodeIntegration: false,
                 sandbox: true,
@@ -152,7 +152,7 @@ function startMenuBar(account: Account, config: Config, bar: Menubar.MenubarApp 
             alwaysOnTop: IS_DEBUG || !!config.always_on_top,
             tooltip: 'Mstdn',
             useContentSize: true,
-            autoHideMenuBar: true,
+            autoHideMenuBar: false,
             show: false,
             showDockIcon: true,
             webPreferences: {

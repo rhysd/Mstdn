@@ -78,4 +78,5 @@ let config: Config | null = null;
 Ipc.on('mstdn:config', (c: Config, a: Account) => {
     config = c;
     setupKeybinds(config.keymaps, a.host);
+    document.title = `${document.title} @${a.name}@${a.host}`;
 });
