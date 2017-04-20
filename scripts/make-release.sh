@@ -40,7 +40,7 @@ function make-dist() {
         cp LICENSE README.md "$dir"
         zip --symlinks "dist/${dir}-${version}.zip" -r "$dir"
     done
-    rm -r Mstdn-*
+    rm -rf Mstdn-*
     open dist
 }
 
