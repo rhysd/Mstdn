@@ -117,6 +117,7 @@ function startNormalWindow(account: Account, config: Config): Promise<Window> {
             defaultWidth: 600,
             defaultHeight: 800,
         });
+        const zoomFactor = config.zoom_factor || 0.9;
         const win = new BrowserWindow({
             width: state.width,
             height: state.height,
@@ -131,6 +132,7 @@ function startNormalWindow(account: Account, config: Config): Promise<Window> {
                 sandbox: !!config.chromium_sandbox,
                 preload: PRELOAD_JS,
                 partition: partitionForAccount(account),
+                zoomFactor,
             },
         });
         win.once('ready-to-show', () => {
@@ -149,6 +151,7 @@ function startNormalWindow(account: Account, config: Config): Promise<Window> {
 
         win.webContents.on('dom-ready', () => {
             applyUserCss(win, config);
+            win.webContents.setZoomFactor(zoomFactor);
             log.debug('Send config to renderer procress');
             win.webContents.send('mstdn:config', config, account);
         });
@@ -167,10 +170,11 @@ function startMenuBar(account: Account, config: Config, bar: Menubar.MenubarApp 
     log.debug('Setup a menubar window');
     return new Promise<Window>(resolve => {
         const state = windowState({
-            defaultWidth: 350,
+            defaultWidth: 320,
             defaultHeight: 420,
         });
         const icon = trayIcon(config.icon_color);
+        const zoomFactor = config.zoom_factor || 0.9;
         const mb = bar || menubar({
             icon,
             width: state.width,
@@ -186,6 +190,7 @@ function startMenuBar(account: Account, config: Config, bar: Menubar.MenubarApp 
                 sandbox: !!config.chromium_sandbox,
                 preload: PRELOAD_JS,
                 partition: partitionForAccount(account),
+                zoomFactor,
             },
         });
         mb.once('after-create-window', () => {
@@ -195,6 +200,7 @@ function startMenuBar(account: Account, config: Config, bar: Menubar.MenubarApp 
             }
             mb.window.webContents.on('dom-ready', () => {
                 applyUserCss(mb.window, config);
+                mb.window.webContents.setZoomFactor(zoomFactor);
                 log.debug('Send config to renderer procress');
                 mb.window.webContents.send('mstdn:config', config, account);
             });

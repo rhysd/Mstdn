@@ -44,6 +44,8 @@ function make-dist() {
     open dist
 }
 
+export PATH=./node_modules/.bin:$PATH
+
 prepare-app
 pack-app
 make-dist
