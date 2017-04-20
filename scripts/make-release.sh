@@ -24,9 +24,9 @@ function pack-app() {
     local electron_version=$(electron --version)
     electron_version=${electron_version#v}
 
-    electron-packager ./app --platform=darwin --arch=x64 "--app-copyright=copyright (c) 2017 rhysd" --app-version=$version --build-version=$version --icon=./resources/icon.icns --electron-version=$electron_version
-    electron-packager ./app --platform=linux --arch=all "--app-copyright=copyright (c) 2017 rhysd" --app-version=$version --build-version=$version --icon=./resources/icon.ico --electron-version=$electron_version
-    electron-packager ./app --platform=win32 --arch=all "--app-copyright=copyright (c) 2017 rhysd" --app-version=$version --build-version=$version --icon=./resources/icon.ico --electron-version=$electron_version --version-string=$version
+    electron-packager ./app --platform=darwin --arch=x64 "--app-copyright=copyright (c) 2017 rhysd" --app-version=$version --build-version=$version --icon=./resources/icon/icon.icns --electron-version=$electron_version
+    electron-packager ./app --platform=linux --arch=all "--app-copyright=copyright (c) 2017 rhysd" --app-version=$version --build-version=$version --icon=./resources/icon/icon.ico --electron-version=$electron_version
+    electron-packager ./app --platform=win32 --arch=all "--app-copyright=copyright (c) 2017 rhysd" --app-version=$version --build-version=$version --icon=./resources/icon/icon.ico --electron-version=$electron_version --version-string=$version
 }
 
 function make-dist() {
