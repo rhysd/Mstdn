@@ -17,7 +17,7 @@ process.on('unhandledRejection', (reason: string) => {
             buttons: ['OK'],
             message: msg,
         }, () => {
-            qpp.quit();
+            app.quit();
         })
     });
     log.error(msg);

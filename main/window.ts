@@ -1,10 +1,11 @@
+import * as fs from 'fs';
 import {app, BrowserWindow, shell, dialog, Menu} from 'electron';
 import windowState = require('electron-window-state');
 import * as menubar from 'menubar';
 import {Config, Account} from './config';
 import {partitionForAccount} from './account_switcher';
 import log from './log';
-import {IS_DEBUG, IS_DARWIN, IS_WINDOWS, IS_LINUX, APP_ICON, PRELOAD_JS, trayIcon} from './common';
+import {IS_DEBUG, IS_DARWIN, IS_WINDOWS, IS_LINUX, APP_ICON, PRELOAD_JS, USER_CSS, trayIcon} from './common';
 
 const ELECTRON_ISSUE_9230 = IS_WINDOWS || IS_LINUX;
 
@@ -93,6 +94,21 @@ export default class Window {
     }
 }
 
+function applyUserCss(win: Electron.BrowserWindow, config: Config) {
+    if (config.chromium_sandbox) {
+        log.debug('User CSS is disabled because Chromium sandbox is enabled');
+        return;
+    }
+    fs.readFile(USER_CSS, 'utf8', (err, css) => {
+        if (err) {
+            log.debug('Failed to load user.css: ', err.message);
+            return;
+        }
+        win.webContents.insertCSS(css);
+        log.debug('Applied user CSS:', USER_CSS);
+    });
+}
+
 function startNormalWindow(account: Account, config: Config): Promise<Window> {
     log.debug('Setup a normal window');
     return new Promise<Window>(resolve => {
@@ -108,10 +124,10 @@ function startNormalWindow(account: Account, config: Config): Promise<Window> {
             icon: APP_ICON,
             show: false,
             useContentSize: true,
-            autoHideMenuBar: config.hide_menu,
+            autoHideMenuBar: !!config.hide_menu,
             webPreferences: {
                 nodeIntegration: false,
-                sandbox: true,
+                sandbox: !!config.chromium_sandbox,
                 preload: PRELOAD_JS,
                 partition: partitionForAccount(account),
             },
@@ -131,6 +147,7 @@ function startNormalWindow(account: Account, config: Config): Promise<Window> {
         state.manage(win);
 
         win.webContents.on('dom-ready', () => {
+            applyUserCss(win, config);
             log.debug('Send config to renderer procress');
             win.webContents.send('mstdn:config', config, account);
         });
@@ -160,12 +177,12 @@ function startMenuBar(account: Account, config: Config, bar: Menubar.MenubarApp 
             alwaysOnTop: IS_DEBUG || !!config.always_on_top,
             tooltip: 'Mstdn',
             useContentSize: true,
-            autoHideMenuBar: config.hide_menu,
+            autoHideMenuBar: !!config.hide_menu,
             show: false,
             showDockIcon: true,
             webPreferences: {
                 nodeIntegration: false,
-                sandbox: true,
+                sandbox: !!config.chromium_sandbox,
                 preload: PRELOAD_JS,
                 partition: partitionForAccount(account),
             },
@@ -176,6 +193,7 @@ function startMenuBar(account: Account, config: Config, bar: Menubar.MenubarApp 
                 mb.window.webContents.openDevTools({mode: 'detach'});
             }
             mb.window.webContents.on('dom-ready', () => {
+                applyUserCss(mb.window, config);
                 log.debug('Send config to renderer procress');
                 mb.window.webContents.send('mstdn:config', config, account);
             });

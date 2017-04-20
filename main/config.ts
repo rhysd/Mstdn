@@ -17,6 +17,7 @@ export interface Config {
     normal_window: boolean;
     zoom_factor: number;
     accounts: Account[];
+    chromium_sandbox: boolean;
     keymaps: {[key: string]: string};
 }
 
@@ -31,6 +32,7 @@ function makeDefaultConfig(): Config {
         hide_menu: false,
         normal_window: menubarBroken,
         zoom_factor: 0.9,
+        chromium_sandbox: true,
         accounts: [{
             name: '',
             host: '',

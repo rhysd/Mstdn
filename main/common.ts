@@ -9,6 +9,7 @@ export const APP_ICON = path.join(__dirname, '..', 'resources', 'icon', 'icon.pn
 export const PRELOAD_JS = path.join(__dirname, '..', 'renderer', 'preload.js');
 export const DATA_DIR = app.getPath('userData');
 export const CONFIG_FILE = path.join(DATA_DIR, 'config.json');
+export const USER_CSS = path.join(DATA_DIR, 'user.css');
 
 export function trayIcon(color: string) {
     return path.join(__dirname, '..', 'resources', 'icon', `tray-icon-${
