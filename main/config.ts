@@ -1,7 +1,7 @@
 import {app, systemPreferences, dialog, shell} from 'electron';
 import * as fs from 'fs';
 import log from './log';
-import {CONFIG_FILE, IS_DARWIN, IS_WINDOWS} from './common';
+import {CONFIG_FILE, IS_DARWIN, IS_WINDOWS, DATA_DIR} from './common';
 
 export interface Account {
     host: string;
@@ -18,6 +18,7 @@ export interface Config {
     zoom_factor: number;
     accounts: Account[];
     chromium_sandbox: boolean;
+    __DATA_DIR?: string;
     keymaps: {[key: string]: string};
 }
 
@@ -100,6 +101,7 @@ export default function loadConfig(): Promise<Config> {
                 if (!config.accounts || config.accounts[0].host === '' || config.accounts[0].name === '') {
                     recommendConfigAndDie(CONFIG_FILE);
                 } else {
+                    config.__DATA_DIR = DATA_DIR;
                     resolve(config);
                 }
             } catch (e) {
