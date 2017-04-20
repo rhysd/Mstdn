@@ -82,6 +82,7 @@ export default class Window {
 
     close() {
         log.debug('Closing window:', this.account);
+        this.state.saveState();
         this.state.unmanage();
         this.browser.webContents.removeAllListeners();
         this.browser.removeAllListeners();
