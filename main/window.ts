@@ -11,11 +11,16 @@ const ELECTRON_ISSUE_9230 = IS_WINDOWS || IS_LINUX;
 
 export default class Window {
     static create(account: Account, config: Config, mb: Menubar.MenubarApp | null = null) {
-        if (config.normal_window) {
-            return startNormalWindow(account, config);
-        } else {
-            return startMenuBar(account, config, mb);
-        }
+        return (config.normal_window ? startNormalWindow(account, config) : startMenuBar(account, config, mb))
+            .then(win => {
+                win.browser.webContents.on('dom-ready', () => {
+                    applyUserCss(win.browser, config);
+                    win.browser.webContents.setZoomFactor(config.zoom_factor);
+                    log.debug('Send config to renderer procress');
+                    win.browser.webContents.send('mstdn:config', config, account);
+                });
+                return win;
+            });
     }
 
     constructor(
@@ -77,6 +82,11 @@ export default class Window {
 
     open(url: string) {
         log.debug('Open URL:', url);
+        this.browser.webContents.once('did-get-redirect-request', (e: Event, _: string, newUrl: string) => {
+            log.debug('Redirecting to ' + newUrl + '. Will navigate to login page for user using single user mode');
+            e.preventDefault();
+            this.browser.loadURL(`https://${this.account.host}/auth/sign_in`);
+        });
         this.browser.loadURL(url);
     }
 
@@ -117,7 +127,6 @@ function startNormalWindow(account: Account, config: Config): Promise<Window> {
             defaultWidth: 600,
             defaultHeight: 800,
         });
-        const zoomFactor = config.zoom_factor || 0.9;
         const win = new BrowserWindow({
             width: state.width,
             height: state.height,
@@ -132,7 +141,7 @@ function startNormalWindow(account: Account, config: Config): Promise<Window> {
                 sandbox: !!config.chromium_sandbox,
                 preload: PRELOAD_JS,
                 partition: partitionForAccount(account),
-                zoomFactor,
+                zoomFactor: config.zoom_factor,
             },
         });
         win.once('ready-to-show', () => {
@@ -149,12 +158,6 @@ function startNormalWindow(account: Account, config: Config): Promise<Window> {
         }
         state.manage(win);
 
-        win.webContents.on('dom-ready', () => {
-            applyUserCss(win, config);
-            win.webContents.setZoomFactor(zoomFactor);
-            log.debug('Send config to renderer procress');
-            win.webContents.send('mstdn:config', config, account);
-        });
         win.webContents.once('dom-ready', () => {
             log.debug('Normal window application was launched');
             if (IS_DEBUG) {
@@ -174,7 +177,6 @@ function startMenuBar(account: Account, config: Config, bar: Menubar.MenubarApp 
             defaultHeight: 420,
         });
         const icon = trayIcon(config.icon_color);
-        const zoomFactor = config.zoom_factor || 0.9;
         const mb = bar || menubar({
             icon,
             width: state.width,
@@ -190,7 +192,7 @@ function startMenuBar(account: Account, config: Config, bar: Menubar.MenubarApp 
                 sandbox: !!config.chromium_sandbox,
                 preload: PRELOAD_JS,
                 partition: partitionForAccount(account),
-                zoomFactor,
+                zoomFactor: config.zoom_factor,
             },
         });
         mb.once('after-create-window', () => {
@@ -198,12 +200,6 @@ function startMenuBar(account: Account, config: Config, bar: Menubar.MenubarApp 
             if (IS_DEBUG) {
                 mb.window.webContents.openDevTools({mode: 'detach'});
             }
-            mb.window.webContents.on('dom-ready', () => {
-                applyUserCss(mb.window, config);
-                mb.window.webContents.setZoomFactor(zoomFactor);
-                log.debug('Send config to renderer procress');
-                mb.window.webContents.send('mstdn:config', config, account);
-            });
             state.manage(mb.window);
 
             resolve(new Window(mb.window, state, account, mb));
