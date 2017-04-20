@@ -10,8 +10,8 @@ app.removeAllListeners();
 const appReady = new Promise<void>(resolve => app.once('ready', resolve));
 
 process.on('unhandledRejection', (reason: string) => {
-    const msg = 'FATAL: Unhandled rejection! Reason: ' + reason
-    appReady.then(() => {
+    const msg = 'FATAL: Unhandled rejection! Reason: ' + reason;
+    appReady.then(() =>
         dialog.showMessageBox({
             type: 'error',
             buttons: ['OK'],
@@ -19,7 +19,7 @@ process.on('unhandledRejection', (reason: string) => {
         }, () => {
             app.quit();
         })
-    });
+    );
     log.error(msg);
 });
 

@@ -102,6 +102,9 @@ export default function loadConfig(): Promise<Config> {
                     recommendConfigAndDie(CONFIG_FILE);
                 } else {
                     config.__DATA_DIR = DATA_DIR;
+                    if (config.chromium_sandbox === undefined) {
+                        config.chromium_sandbox = true;
+                    }
                     resolve(config);
                 }
             } catch (e) {
