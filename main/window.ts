@@ -83,6 +83,9 @@ export default class Window {
     open(url: string) {
         log.debug('Open URL:', url);
         this.browser.webContents.once('did-get-redirect-request', (e: Event, _: string, newUrl: string) => {
+            if (url === newUrl) {
+                return;
+            }
             log.debug('Redirecting to ' + newUrl + '. Will navigate to login page for user using single user mode');
             e.preventDefault();
             this.browser.loadURL(`https://${this.account.host}/auth/sign_in`);
