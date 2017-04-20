@@ -11,8 +11,9 @@ Features:
 
 - [x] Small window on your menubar (or isolated normal window)
 - [x] Desktop notification
-- [x] Customizable shortcut keybinds
+- [x] Customizable (and pluggable) shortcut keybinds
 - [x] Multi-account (switching among accounts)
+- [x] User CSS
 
 Mastodon is an open source project. So if you want to make a new UI, you can just fork the project,
 implement your favorite UI and host it on your place. Then you can participate Mastodon networks from it.
@@ -79,7 +80,8 @@ When this value is set to `true`, the window won't be hidden if it loses a focus
 
 When this value is set to `true`, application will be launched as a normal window application.
 If menu bar behavior does not work for you, please use set this value to `true` to avoid it.
-Default value is `false` on macOS or Linux, `true` on Windows because window position is broken in some version of Windows.
+Default value is `false` on macOS or Linux, `true` on Windows because window position is broken
+in some version of Windows.
 
 ### `hide_menu`
 
@@ -102,6 +104,16 @@ Array of your accounts. An element should has `"name"`, `"host"` and `"default_p
 
 You need to write up this config at first.
 
+### `chromium_sandbox`
+
+If `true` is specified, Chromium's native sandbox is enabled (and default value is `true`).
+Sandbox provides some OS level security protection such as resource access control like tabs
+in Chromium. However, sandbox also blocks preload scripts for Electron application.
+
+If `false` is specified, you can use some advanced features (user CSS and key shortcut plugin).
+Before setting `false` to this value, please read and understand [sandbox documentation in Electron repo][sandbox doc]
+to know what you're doing.
+
 ### `keymaps`
 
 Object whose key is a key sequence and whose value is an action name.
@@ -119,6 +131,9 @@ If an action name starts with `/`, it will navigate to the path. For example,
 if you set `"/web/timelines/home"` to some key shortcut and you input the key,
 browser will navigate page to `https://{your host}/web/timelines/home`.
 
+If an action name ends with `.js`, it will run key shortcut plugin (please see below
+'Key Shortcut Plugin' section).
+
 By default, some key shortcuts for tab items are set in addition to above table.
 
 <details>
@@ -130,6 +145,7 @@ By default, some key shortcuts for tab items are set in addition to above table.
   "always_on_top": false,
   "normal_window": false,
   "zoom_factor": 0.9,
+  "chromium_sandbox": true,
   "accounts": [
     {
       "name": "Linda_pp",
@@ -168,14 +184,67 @@ By default, some key shortcuts for tab items are set in addition to above table.
 
 ## Multi account
 
-If you set multiple accounts to `accounts` array in `config.json`, `Accounts` menu item will appear in application menu.
+If you set multiple accounts to `accounts` array in `config.json`, `Accounts` menu item will appear
+in application menu.
 
 ![multi account menu item](https://github.com/rhysd/ss/blob/master/Mstdn/multi-account.png?raw=true)
 
 It will show the list of your account. Check mark is added for current user.
-When you click menu item of non-current user, application window will be recreated and switch page to the account.
+When you click menu item of non-current user, application window will be recreated and switch page
+to the account.
+
+## Key Shortcut Plugin
+
+By specifying JavaScript file to action name in `keymaps` of `config.json`, you can write your
+favorite behavior with JavaScript directly. Please note that `"chromium_sandbox" : true`
+is also required (if you don't know what happens with `"chromium_sandbox" : true`, please read
+above config section).
+
+```json
+{
+    ...
+
+    "chromium_sandbox": false,
+
+    ...
+
+    "keymaps": {
+        "r": "hello.js"
+    }
+}
+```
+
+The script file path is a relative path from your `Mstdn` application directory. For example,
+Specifying `hello.js` will run `/Users/You/Application Support/Mstdn/hello.js` on Mac.
+
+The plugin script MUST export one function. Function receives configuration object and current
+account object as its parameters. So above `hello.js` would look like:
+
+```js
+module.exports = function (config, account) {
+    alert('Hello, ' + account.name);
+}
+```
+
+With above example config, typing `r` will show 'Hello, {your name}' alert dialog. You can use any
+DOM APIs, Node.js's standard libraries and Electron APIs in plugin script.
+
+## User CSS
+
+When `user.css` is put in your `Mstdn` application directory, it will be loaded automatically.
+To enable this feature, `"chromium_sandbox" : true` is also required (if you don't know what happens
+with `"chromium_sandbox" : true`, please read above config section).
+
+For example, below `/Users/You/Application Support/Mstdn/user.css` will change font color to red on Mac.
+
+```css
+body {
+  color: red !important;
+}
+```
 
 [Mastodon]: https://github.com/tootsuite/mastodon
 [npm]: https://www.npmjs.com/package/mstdn
 [Release page]: https://github.com/rhysd/Mstdn/releases
 [Electron]: electron.atom.io
+[sandbox doc]: https://github.com/electron/electron/blob/master/docs/api/sandbox-option.md
