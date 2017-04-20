@@ -3,6 +3,8 @@ import * as Mousetrap from 'mousetrap';
 import * as Ipc from './ipc';
 import log from './log';
 import {Config, Account} from '../main/config';
+import r from './require';
+const shell = r('electron').remote.shell;
 
 function scrollable() {
     const scrollable = document.querySelector('.scrollable');
@@ -49,6 +51,9 @@ const ShortcutActions = {
     'prev-account': () => {
         Ipc.send('mstdn:prev-account');
     },
+    'open-in-browser': () => {
+        shell.openExternal(window.location.href);
+    }
 } as {[action: string]: () => void};
 
 export default function setupKeymaps(

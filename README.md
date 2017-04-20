@@ -118,14 +118,15 @@ to know what you're doing.
 
 Object whose key is a key sequence and whose value is an action name.
 
-| Action Name     | Description                     | Default Key |
-|-----------------|---------------------------------|-------------|
-| `scroll-down`   | Scroll down window              | `j`         |
-| `scroll-up`     | Scroll up window                | `k`         |
-| `scroll-top`    | Scroll up to top of window      | `i`         |
-| `scroll-bottom` | Scroll down to bottom of window | `m`         |
-| `next-account`  | Switch to next account          | N/A         |
-| `prev-account`  | Switch to previous account      | N/A         |
+| Action Name       | Description                     | Default Key |
+|-------------------|---------------------------------|-------------|
+| `scroll-down`     | Scroll down window              | `j`         |
+| `scroll-up`       | Scroll up window                | `k`         |
+| `scroll-top`      | Scroll up to top of window      | `i`         |
+| `scroll-bottom`   | Scroll down to bottom of window | `m`         |
+| `next-account`    | Switch to next account          | N/A         |
+| `prev-account`    | Switch to previous account      | N/A         |
+| `open-in-browser` | Open current page in browser    | N/A         |
 
 If an action name starts with `/`, it will navigate to the path. For example,
 if you set `"/web/timelines/home"` to some key shortcut and you input the key,
