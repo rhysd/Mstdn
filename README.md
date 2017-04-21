@@ -15,6 +15,7 @@ Features:
 - [x] Customizable (and pluggable) shortcut keybinds
 - [x] Multi-account (switching among accounts)
 - [x] User CSS
+- [x] Plugin architecture based on Node.js and Electron APIs
 
 Mastodon is an open source project. So if you want to make a new UI, you can just fork the project,
 implement your favorite UI and host it on your place. Then you can participate Mastodon networks from it.
@@ -256,6 +257,93 @@ body {
 }
 ```
 
+## Preload Plugin
+
+You can make a Node.js package which is preloaded before loading inner mastodon page.
+
+Preload plugin is enabled if `chromium_sandbox` option is set to `false`. Please read above
+configuration section before using any plugin.
+
+### How to make
+
+Create `node_modules` directory in your application directory at first. And then, please make
+`mstdn-preload-hello` directory. It consists a node package.
+
+Package name must start with `mastdn-preload-`.
+
+Make `package.json` manually or by `$ npm init` in the directory.
+
+```json
+{
+  "name": "mstdn-preload-hello",
+  "version": "0.0.0",
+  "description": "sample of preload plugin of Mstdn.app",
+  "main": "index.js",
+  "author": "Your name",
+  "license": "Some license"
+}
+```
+
+Finally make `index.js` as below:
+
+```javascript
+module.exports = (config, account) => {
+    console.log('Hello from plugin!', config, account);
+}
+```
+
+Package must export one function which receives two parameters `config` and `account`.
+
+Note that you can use below APIs in the script.
+
+- [Node.js standard libraries][] via `require` (e.g. `require('fs')`)
+- Dependant node packages listed in `package.json` of the plugin
+- [Electron Renderer APIs][Electron APIs]
+- All Web APIs on browser (including DOM API)
+
+#### !!! Security Notice !!!
+
+Do not leak Node.js stuff to global namespace like below.
+
+```javascript
+// Never do things like this!
+window.my_require = require;
+```
+
+### How to use
+
+If you didn't try above 'How to make' section, please install plugin package at first.
+Below will install 'hello' plugin to `{app directory}/node_modules/mstdn-preload-hello`.
+
+```
+$ cd {Your application directory}
+$ npm install mstdn-preload-hello
+```
+
+And then write what plugin should be loaded to `"preload"` section of your `config.json`.
+`"hello"` should be added to the list.
+
+```json
+{
+    ...
+
+    "preload" [
+        "hello"
+    ],
+
+    ...
+}
+```
+
+Finally open Mstdn.app and see DevTools via [Menu] -> [View] -> [Developper Tools] -> console.
+If window is too small to see DevTools, please make window size bigger.
+
+In console, the message 'Hello from plugin!', config information and account information should be output.
+
+### List of Plugins
+
+To be made
+
 ## Contact to the Author
 
 Please feel free to make an issue on GitHub or mention on Mastodon/Twitter.
@@ -269,3 +357,5 @@ Please feel free to make an issue on GitHub or mention on Mastodon/Twitter.
 [Electron]: electron.atom.io
 [sandbox doc]: https://github.com/electron/electron/blob/master/docs/api/sandbox-option.md
 [npm version badge]: https://badge.fury.io/js/mstdn.svg
+[Node.js standard libraries]: https://nodejs.org/api/
+[Electron APIs]: https://electron.atom.io/docs/api/

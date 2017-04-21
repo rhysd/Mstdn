@@ -20,6 +20,7 @@ export interface Config {
     chromium_sandbox: boolean;
     __DATA_DIR?: string;
     keymaps: {[key: string]: string};
+    preload: string[];
 }
 
 function makeDefaultConfig(): Config {
@@ -51,6 +52,7 @@ function makeDefaultConfig(): Config {
             5: '/web/timelines/public',
             6: '/web/getting-started'
         },
+        preload: [],
     };
 }
 
