@@ -1,11 +1,12 @@
 Web-based Desktop Client for [Mastodon][]
 =========================================
-
-<img src="https://github.com/rhysd/ss/blob/master/Mstdn/main.png?raw=true" width="484" alt="screen shot"/>
+[![npm version][npm version badge]][npm]
 
 Mstdn is a desktop application based on mobile version Mastodon page and [Electron][] framework.
 It basically uses Mastodon's mobile page and provides various desktop application features
 (such as desktop notification, keybinds, multi-account support).
+
+<img src="https://github.com/rhysd/ss/blob/master/Mstdn/main.png?raw=true" width="484" alt="screen shot"/>
 
 Features:
 
@@ -132,8 +133,19 @@ If an action name starts with `/`, it will navigate to the path. For example,
 if you set `"/web/timelines/home"` to some key shortcut and you input the key,
 browser will navigate page to `https://{your host}/web/timelines/home`.
 
+Below is a default path actions. They are corresponding the position of tab items.
+
+| Path                          | Description                       | Default Key |
+|-------------------------------|-----------------------------------|-------------|
+| `/web/statuses/new`           | Move to 'make a new toot' page    | `1`         |
+| `/web/timelines/home`         | Move to 'home timeline' page      | `2`         |
+| `/web/notifications`          | Move to 'notifications' page      | `3`         |
+| `/web/timelines/public/local` | Move to 'local timeline' page     | `4`         |
+| `/web/timelines/public`       | Move to 'federated timeline' page | `5`         |
+| `/web/getting-started`        | Move to 'getting started' page    | `6`         |
+
 If an action name ends with `.js`, it will run key shortcut plugin (please see below
-'Key Shortcut Plugin' section).
+'Key Shortcut Plugin' section). This plugin feature requires `"chromium_sandbox": true`.
 
 By default, some key shortcuts for tab items are set in addition to above table.
 
@@ -244,8 +256,16 @@ body {
 }
 ```
 
+## Contact to the Author
+
+Please feel free to make an issue on GitHub or mention on Mastodon/Twitter.
+
+- [@Linda\_pp@mstdn.jp](https://mstdn.jp/@Linda_pp) (Japanese account. English is also OK)
+- [@inudog@mastodon.social](https://mastodon.social/@inudog) (English account)
+
 [Mastodon]: https://github.com/tootsuite/mastodon
 [npm]: https://www.npmjs.com/package/mstdn
 [Release page]: https://github.com/rhysd/Mstdn/releases
 [Electron]: electron.atom.io
 [sandbox doc]: https://github.com/electron/electron/blob/master/docs/api/sandbox-option.md
+[npm version badge]: https://badge.fury.io/js/mstdn.svg
