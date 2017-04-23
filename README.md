@@ -44,7 +44,8 @@ $ open-mstdn-app
 ```
 
 At first, a dialog which recommends to write up config is shown and JSON config file will be open in your editor.
-You need to fill up `"name"` and `"host"` keys in first element of `"accounts"`.
+You need to fill up `"name"` and `"host"` keys in first element of `"accounts"`. Please see below `accounts` section
+to know how to configure the option.
 
 Then please try to start app again. Usage is the same as web client on mobile devices.
 Some shortcuts are available by default (please see below 'Customization' section).
@@ -101,8 +102,14 @@ Default font size is a bit bigger because the UI is originally for mobile device
 ### `accounts`
 
 Array of your accounts. An element should has `"name"`, `"host"` and `"default_page"` keys.
-`"name"` represents your screen name. `"host"` represents a host part of URL of your mastodon instance.
-`"default_page"` is a page firstly shown.
+
+`"name"` represents your screen name. If your name is `@foo` then please specify `"foo"` for it.
+
+`"host"` represents a host part of URL of your mastodon instance. If you belong to
+`https://mastodon.social`, please specify `mastodon.social`. `https://` is not necessary.
+
+`"default_page"` is a path of page firstly shown. If `/web/notifications` is specified,
+`https://{your host}/web/notifications` will be open on app starting.
 
 You need to write up this config at first.
 
