@@ -4,7 +4,13 @@ import log from './log';
 import {Account} from './config';
 
 export function partitionForAccount(account: Account) {
-    return `persist:mstdn:${account.name}:${account.host}`;
+    let host = account.host;
+    if (account.host.startsWith('https://')) {
+        host = host.slice(8);
+    } else if (account.host.startsWith('http://')) {
+        host = host.slice(7);
+    }
+    return `persist:mstdn:${account.name}:${host}`;
 }
 
 export default class AccountSwitcher extends EventEmitter {
