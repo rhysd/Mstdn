@@ -351,6 +351,28 @@ In console, the message 'Hello from plugin!', config information and account inf
 
 To be made
 
+## How to Debug
+
+By setting `NODE_ENV` environment variable to `development`, Mstdn will start in debug mode.
+
+In debug mode, app outputs all logs to stdout and opens DevTools for a page rendered in a window
+automatically. You can also see logs in 'console' tab of DevTools for debugging renderer process.
+
+```sh
+# If you installed this app via npm
+$ NODE_ENV=development open-mstdn-app
+
+# Package on macOS
+$ NODE_ENV=development /path/to/Mstdn.app/Contents/MacOS/Mstdn
+
+# Package on Linux
+$ NODE_ENV=development /path/to/Mstdn-linux-xxx-x.y.z/Mstdn
+
+# Package on cmd.exe on Windows
+$ set NODE_ENV=development
+$ \path\to\Mstdn-win32-xxx-x.y.z\Mstdn.exe
+```
+
 ## Contact to the Author
 
 Please feel free to make an issue on GitHub or mention on Mastodon/Twitter.
