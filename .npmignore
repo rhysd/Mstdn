@@ -12,3 +12,4 @@
 *.ts
 *.js.map
 /typings
+/.github

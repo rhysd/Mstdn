@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import {app, BrowserWindow, shell, dialog, Menu} from 'electron';
 import windowState = require('electron-window-state');
 import * as menubar from 'menubar';
-import {Config, Account} from './config';
+import {Config, Account, hostUrl} from './config';
 import {partitionForAccount} from './account_switcher';
 import log from './log';
 import {IS_DEBUG, IS_DARWIN, IS_WINDOWS, IS_LINUX, APP_ICON, PRELOAD_JS, USER_CSS, trayIcon} from './common';
@@ -35,7 +35,7 @@ export default class Window {
         }
 
         browser.webContents.on('will-navigate', (e, url) => {
-            if (!url.startsWith(`https://${this.account.host}`)) {
+            if (!url.startsWith(hostUrl(this.account))) {
                 e.preventDefault();
                 shell.openExternal(url);
             }
@@ -56,7 +56,7 @@ export default class Window {
         browser.webContents.session.setPermissionRequestHandler((contents, permission, callback) => {
             const url = contents.getURL();
             const grantedByDefault =
-                url.startsWith(`https://${this.account.host}`) &&
+                url.startsWith(hostUrl(this.account)) &&
                 permission !== 'geolocation' &&
                 permission !== 'media';
 
@@ -88,7 +88,7 @@ export default class Window {
             }
             log.debug('Redirecting to ' + newUrl + '. Will navigate to login page for user using single user mode');
             e.preventDefault();
-            this.browser.loadURL(`https://${this.account.host}/auth/sign_in`);
+            this.browser.loadURL(hostUrl(this.account) + '/auth/sign_in');
         });
         this.browser.loadURL(url);
     }

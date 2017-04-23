@@ -1,6 +1,6 @@
 import {app, Menu, globalShortcut, Tray} from 'electron';
 import log from './log';
-import {Config, Account} from './config';
+import {Config, Account, hostUrl} from './config';
 import AccountSwitcher from './account_switcher';
 import defaultMenu from './default_menu';
 import Window from './window';
@@ -26,7 +26,7 @@ export class App {
 
     start() {
         const a = this.switcher.current;
-        const url = `https://${a.host}${a.default_page}`;
+        const url = hostUrl(a) + a.default_page;
         this.win.open(url);
         log.debug('Application started', a, url);
     }

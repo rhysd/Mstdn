@@ -73,6 +73,14 @@ function recommendConfigAndDie(file: string) {
     showDyingDialog(title, detail);
 }
 
+export function hostUrl(a: Account) {
+    if (a.host.startsWith('https://') || a.host.startsWith('http://')) {
+        return a.host;
+    } else {
+        return 'https://' + a.host;
+    }
+}
+
 export default function loadConfig(): Promise<Config> {
     return new Promise<Config>(resolve => {
         fs.readFile(CONFIG_FILE, 'utf8', (err, json) => {
