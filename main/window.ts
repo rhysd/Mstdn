@@ -140,7 +140,7 @@ function startNormalWindow(account: Account, config: Config): Promise<Window> {
             autoHideMenuBar: !!config.hide_menu,
             webPreferences: {
                 nodeIntegration: false,
-                sandbox: !!config.chromium_sandbox,
+                sandbox: sandboxFlag(config, account),
                 preload: PRELOAD_JS,
                 partition: partitionForAccount(account),
                 zoomFactor: config.zoom_factor,
@@ -171,6 +171,20 @@ function startNormalWindow(account: Account, config: Config): Promise<Window> {
     });
 }
 
+function sandboxFlag(config: Config, account: Account) {
+    // XXX:
+    // Electron has a bug that CSP prevents preload script from being loaded.
+    // mstdn.jp enables CSP. So currently we need to disable native sandbox to load preload script.
+    //
+    //   Ref: https://github.com/electron/electron/issues/9276
+    //
+    const electronBugIssue9276 = account.host === 'mstdn.jp' || account.host === 'https://mstdn.jp';
+    if (electronBugIssue9276) {
+        return false;
+    }
+    return !!config.chromium_sandbox;
+}
+
 function startMenuBar(account: Account, config: Config, bar: Menubar.MenubarApp | null): Promise<Window> {
     log.debug('Setup a menubar window');
     return new Promise<Window>(resolve => {
@@ -190,7 +204,7 @@ function startMenuBar(account: Account, config: Config, bar: Menubar.MenubarApp 
             showDockIcon: true,
             webPreferences: {
                 nodeIntegration: false,
-                sandbox: !!config.chromium_sandbox,
+                sandbox: sandboxFlag(config, account),
                 preload: PRELOAD_JS,
                 partition: partitionForAccount(account),
                 zoomFactor: config.zoom_factor,
