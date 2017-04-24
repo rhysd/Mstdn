@@ -3,7 +3,13 @@ interface RequestIdleCallback {
   timeRemaining?: () => number;
 }
 
+interface RequestIdleCallbackOptions {
+    timeout?: number;
+}
+
+type RequestIdleCallbackId = number;
+
 interface Window {
-  requestIdleCallback(cb: (deadline: RequestIdleCallback) => any): NodeJS.Timer;
-  cancelIdleCallback(id: NodeJS.Timer): void;
+  requestIdleCallback(cb: (deadline: RequestIdleCallback) => any, options?: RequestIdleCallbackOptions): RequestIdleCallbackId;
+  cancelIdleCallback(id: RequestIdleCallbackId): void;
 }
