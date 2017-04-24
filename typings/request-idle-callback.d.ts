@@ -1,6 +1,6 @@
 interface RequestIdleCallback {
-  didTimeout?: boolean;
-  timeRemaining?: () => number;
+    didTimeout?: boolean;
+    timeRemaining?(): number;
 }
 
 interface RequestIdleCallbackOptions {
@@ -10,6 +10,6 @@ interface RequestIdleCallbackOptions {
 type RequestIdleCallbackId = number;
 
 interface Window {
-  requestIdleCallback(cb: (deadline: RequestIdleCallback) => any, options?: RequestIdleCallbackOptions): RequestIdleCallbackId;
-  cancelIdleCallback(id: RequestIdleCallbackId): void;
+    requestIdleCallback(cb: (deadline: RequestIdleCallback) => any, options?: RequestIdleCallbackOptions): RequestIdleCallbackId;
+    cancelIdleCallback(id: RequestIdleCallbackId): void;
 }
