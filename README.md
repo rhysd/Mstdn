@@ -264,14 +264,14 @@ body {
 }
 ```
 
-## Preload Plugin
+## Preload Plugin (experimental)
 
 You can make a Node.js package which is preloaded before loading inner mastodon page.
 
 Preload plugin is enabled if `chromium_sandbox` option is set to `false`. Please read above
 configuration section before using any plugin.
 
-### How to make
+### How to make a plugin
 
 Create `node_modules` directory in your application directory at first. And then, please make
 `mstdn-preload-hello` directory. It consists a node package.
