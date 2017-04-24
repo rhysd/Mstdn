@@ -20,8 +20,8 @@ Features:
 Mastodon is an open source project. So if you want to make a new UI, you can just fork the project,
 implement your favorite UI and host it on your place. Then you can participate Mastodon networks from it.
 
-However, Mastodon is a web application. So we can't go out from a browser. So this small tool
-provides a way to do it.
+However, Mastodon is a web application. So we can't go out from a browser. This small tool provides
+the ability to Mastodon page in desktop application window out of browser.
 
 ## Installation
 
@@ -51,6 +51,17 @@ Then please try to start app again. Usage is the same as web client on mobile de
 Some shortcuts are available by default (please see below 'Customization' section).
 
 Supported platforms are macOS (confirmed with 10.12), Linux (hopefully) and Windows (confirmed with Windows 8.1).
+
+There are two window modes 'menubar mode' and 'normal window mode' in this app. You can switch
+them with `"normal_window"` option (please see below 'Customization' section for how to configure it).
+
+- **menubar mode**: Window is attached to menubar. You can toggle the window by clicking menubar icon or typing hot key.
+Advantage of this mode is that app does not fill any workspace. You can see your timeline on demand anytime.
+- **normal window mode**: App starts with a normal window like a separated browser window. You can put/resize window
+as you like in your workspace.
+
+In both modes, app remembers the size and location of its window. So you need to specify window size
+(or location in normal window mode) only once.
 
 ## Customization
 
