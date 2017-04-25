@@ -101,7 +101,7 @@ export default class Window {
         this.browser.removeAllListeners();
         if (this.menubar) {
             // Note:
-            // menubar.windowClear() won't be called because all listners was removed
+            // menubar.windowClear() won't be called because all listners were removed
             delete this.menubar.window;
         }
         this.browser.close();
@@ -121,10 +121,9 @@ export default class Window {
                 log.debug('Toggle window: shown -> hidden');
                 if (IS_DARWIN) {
                     app.hide();
+                } else if (IS_WINDOWS) {
+                    this.browser.minimize();
                 } else {
-                    if (IS_WINDOWS) {
-                        this.browser.blur();
-                    }
                     this.browser.hide();
                 }
             } else {
