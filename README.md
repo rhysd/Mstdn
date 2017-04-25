@@ -134,11 +134,14 @@ You need to write up this config at first.
 
 If `true` is specified, Chromium's native sandbox is enabled (and default value is `true`).
 Sandbox provides some OS level security protection such as resource access control like tabs
-in Chromium. However, sandbox also blocks preload scripts for Electron application.
+in Chromium. However, sandbox also blocks plugins for Electron application.
 
 If `false` is specified, you can use some advanced features (user CSS and key shortcut plugin).
 Before setting `false` to this value, please read and understand [sandbox documentation in Electron repo][sandbox doc]
 to know what you're doing.
+
+Please note that this sandbox feature is different from Node.js integration in Electron. Node.js
+integration is always disabled.
 
 ### `keymaps`
 
@@ -281,27 +284,27 @@ body {
 }
 ```
 
-## Preload Plugin (experimental)
+## Plugin (experimental)
 
-You can make a Node.js package which is preloaded before loading inner mastodon page.
+You can make a Node.js package which is run inner mastodon page.
 
-Preload plugin is enabled if `chromium_sandbox` option is set to `false`. Please read above
+Plugin is enabled if `chromium_sandbox` option is set to `false`. Please read above
 configuration section before using any plugin.
 
 ### How to make a plugin
 
 Create `node_modules` directory in your application directory at first. And then, please make
-`mstdn-preload-hello` directory. It consists a node package.
+`mstdn-plugin-hello` directory. It consists a node package.
 
-Package name must start with `mastdn-preload-`.
+Package name must start with `mastdn-plugin-`.
 
 Make `package.json` manually or by `$ npm init` in the directory.
 
 ```json
 {
-  "name": "mstdn-preload-hello",
+  "name": "mstdn-plugin-hello",
   "version": "0.0.0",
-  "description": "sample of preload plugin of Mstdn.app",
+  "description": "Sample plugin of Mstdn.app",
   "main": "index.js",
   "author": "Your name",
   "license": "Some license"
@@ -311,12 +314,16 @@ Make `package.json` manually or by `$ npm init` in the directory.
 Finally make `index.js` as below:
 
 ```javascript
-module.exports = (config, account) => {
-    console.log('Hello from plugin!', config, account);
-}
+module.exports = {
+    preload(config, account) {
+        console.log('Hello from plugin!', config, account);
+    }
+};
 ```
 
-Package must export one function which receives two parameters `config` and `account`.
+Package must export one object.
+If the object has a function as a value of `preload` key, it will be called at page being loaded.
+The function which receives two parameters `config` and `account`.
 
 Note that you can use below APIs in the script.
 
@@ -337,27 +344,35 @@ window.my_require = require;
 ### How to use
 
 If you didn't try above 'How to make' section, please install plugin package at first.
-Below will install 'hello' plugin to `{app directory}/node_modules/mstdn-preload-hello`.
+Below will install 'hello' plugin to `{app directory}/node_modules/mstdn-plugin-hello`.
 
 ```
 $ cd {Your application directory}
-$ npm install mstdn-preload-hello
+$ npm install mstdn-plugin-hello
 ```
 
-And then write what plugin should be loaded to `"preload"` section of your `config.json`.
+And then write what plugin should be loaded to `"plugins"` section of your account in `config.json`.
 `"hello"` should be added to the list.
 
 ```json
 {
     ...
 
-    "preload" [
-        "hello"
+    "accounts": [
+        {
+            ...
+
+            "plugins": [
+                "hello"
+            ]
+        }
     ],
 
     ...
 }
 ```
+
+You can enable different plugin for each your accounts.
 
 Finally open Mstdn.app and see DevTools via [Menu] -> [View] -> [Developper Tools] -> console.
 If window is too small to see DevTools, please make window size bigger.

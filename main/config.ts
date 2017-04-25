@@ -7,6 +7,7 @@ export interface Account {
     host: string;
     name: string;
     default_page: string;
+    plugins: string[];
 }
 
 export interface Config {
@@ -20,7 +21,6 @@ export interface Config {
     chromium_sandbox: boolean;
     __DATA_DIR?: string;
     keymaps: {[key: string]: string};
-    preload: string[];
 }
 
 function makeDefaultConfig(): Config {
@@ -39,6 +39,7 @@ function makeDefaultConfig(): Config {
             name: '',
             host: '',
             default_page: '/web/timelines/home',
+            plugins: [],
         }],
         keymaps: {
             j: 'scroll-down',
@@ -52,7 +53,6 @@ function makeDefaultConfig(): Config {
             5: '/web/timelines/public',
             6: '/web/getting-started'
         },
-        preload: [],
     };
 }
 
