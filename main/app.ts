@@ -36,20 +36,7 @@ export class App {
             return;
         }
 
-        if (this.win.menubar) {
-            globalShortcut.register(this.config.hot_key, () => {
-                const mb = this.win.menubar!;
-                if (mb.window.isFocused()) {
-                    log.debug('Toggle window: shown -> hidden');
-                    mb.hideWindow();
-                } else {
-                    log.debug('Toggle window: hidden -> shown');
-                    mb.showWindow();
-                }
-            });
-        } else {
-            globalShortcut.register(this.config.hot_key, this.toggleNormalWindow);
-        }
+        globalShortcut.register(this.config.hot_key, () => this.win.toggle());
         log.debug('Hot key was set to:', this.config.hot_key);
     }
 
@@ -62,25 +49,11 @@ export class App {
 
         const icon = trayIcon(this.config.icon_color);
         const tray = new Tray(icon);
-        tray.on('click', this.toggleNormalWindow);
-        tray.on('double-click', this.toggleNormalWindow);
+        const toggle = this.win.toggle.bind(this.win);
+        tray.on('click', toggle);
+        tray.on('double-click', toggle);
         if (IS_DARWIN) {
             tray.setHighlightMode('never');
-        }
-    }
-
-    private toggleNormalWindow = () => {
-        const win = this.win.browser;
-        if (win.isFocused()) {
-            log.debug('Toggle window: shown -> hidden');
-            if (IS_DARWIN) {
-                app.hide();
-            } else {
-                win.hide();
-            }
-        } else {
-            log.debug('Toggle window: hidden -> shown');
-            win.show();
         }
     }
 

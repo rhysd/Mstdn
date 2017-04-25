@@ -106,6 +106,36 @@ export default class Window {
         }
         this.browser.close();
     }
+
+    toggle() {
+        if (this.menubar) {
+            if (this.browser.isFocused()) {
+                log.debug('Toggle window: shown -> hidden');
+                this.menubar.hideWindow();
+            } else {
+                log.debug('Toggle window: hidden -> shown');
+                this.menubar.showWindow();
+            }
+        } else {
+            if (this.browser.isFocused()) {
+                log.debug('Toggle window: shown -> hidden');
+                if (IS_DARWIN) {
+                    app.hide();
+                } else {
+                    if (IS_WINDOWS) {
+                        this.browser.blur();
+                    }
+                    this.browser.hide();
+                }
+            } else {
+                log.debug('Toggle window: hidden -> shown');
+                this.browser.show();
+                if (IS_WINDOWS) {
+                    this.browser.focus();
+                }
+            }
+        }
+    }
 }
 
 function applyUserCss(win: Electron.BrowserWindow, config: Config) {
