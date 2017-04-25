@@ -255,6 +255,7 @@ function startMenuBar(account: Account, config: Config, bar: Menubar.MenubarApp 
             log.debug('Recreate menubar window with different partition:', account);
             const pref = mb.getOption('webPreferences');
             pref.partition = partitionForAccount(account);
+            pref.sandbox = sandboxFlag(config, account);
             mb.setOption('webPreferences', pref);
             mb.showWindow();
         } else {
