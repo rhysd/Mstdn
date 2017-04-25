@@ -31,13 +31,19 @@ the ability to Mastodon page in desktop application window out of browser.
 $ npm install -g mstdn
 ```
 
+### Via [yarn][]
+
+```
+$ yarn global add mstdn --prefix /usr/local
+```
+
 ### As an isolated app
 
 Download a package archive from [Release page][], put unarchived app to proper place, and open it.
 
 ## Usage
 
-If you installed this app via npm, below command is available to start app.
+If you installed this app via npm or yarn, below command is available to start app.
 
 ```
 $ open-mstdn-app
@@ -370,7 +376,7 @@ In debug mode, app outputs all logs to stdout and opens DevTools for a page rend
 automatically. You can also see logs in 'console' tab of DevTools for debugging renderer process.
 
 ```sh
-# If you installed this app via npm
+# If you installed this app via npm or yarn
 $ NODE_ENV=development open-mstdn-app
 
 # Package on macOS
@@ -393,6 +399,7 @@ Please feel free to make an issue on GitHub or mention on Mastodon/Twitter.
 
 [Mastodon]: https://github.com/tootsuite/mastodon
 [npm]: https://www.npmjs.com/package/mstdn
+[yarn]: https://yarnpkg.com/en/package/mstdn
 [Release page]: https://github.com/rhysd/Mstdn/releases
 [Electron]: electron.atom.io
 [sandbox doc]: https://github.com/electron/electron/blob/master/docs/api/sandbox-option.md
