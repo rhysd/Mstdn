@@ -1,6 +1,5 @@
 import * as path from 'path';
 import {Config, Account} from '../main/config';
-import r from './require';
 import log from './log';
 
 interface Plugin {
@@ -27,7 +26,7 @@ export default class PluginsLoader {
         for (const plugin of this.account.plugins || []) {
             const plugin_path = path.join(dir_base, `mstdn-plugin-${plugin}`);
             try {
-                this.preloads[plugin_path] = r(plugin_path) as Plugin;
+                this.preloads[plugin_path] = require(plugin_path) as Plugin;
             } catch (e) {
                 log.error(`Failed to load plugin ${plugin_path}:`, e);
             }

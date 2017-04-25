@@ -1,7 +1,5 @@
+import {ipcRenderer as ipc} from 'electron';
 import log from './log';
-import r from './require';
-const electron = r('electron');
-const ipc = electron.ipcRenderer;
 
 export function on(channel: IpcChannelFromMain, callback: (...args: any[]) => void) {
     ipc.on(channel, (_, ...args: any[]) => {

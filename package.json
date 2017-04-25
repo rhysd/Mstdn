@@ -9,9 +9,9 @@
   },
   "scripts": {
     "build:ts": "tsc --pretty -p .",
-    "build:bundle": "NODE_ENV=development browserify renderer/index.js -o renderer/preload.js",
+    "build:bundle": "NODE_ENV=development browserify -x electron renderer/index.js -o renderer/preload.js",
     "build": "npm run build:ts && npm run build:bundle",
-    "build:bundle:release": "NODE_ENV=production browserify renderer/index.js -o renderer/preload.js",
+    "build:bundle:release": "NODE_ENV=production browserify -x electron renderer/index.js -o renderer/preload.js",
     "build:release": "npm run build:ts && npm run build:bundle:release",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "tslint --project tsconfig.json --type-check $(git ls-files | grep -E \"\\.ts$\")",
