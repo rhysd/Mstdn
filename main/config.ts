@@ -28,7 +28,7 @@ function makeDefaultConfig(): Config {
     const menubarBroken = IS_WINDOWS;
 
     return {
-        hot_key: 'CmdOrCtrl+Shift+S',
+        hot_key: 'CmdOrCtrl+Shift+Enter',
         icon_color: IsDarkMode ? 'white' : 'black',
         always_on_top: false,
         hide_menu: false,

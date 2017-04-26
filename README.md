@@ -63,6 +63,7 @@ them with `"normal_window"` option (please see below 'Customization' section for
 
 - **menubar mode**: Window is attached to menubar. You can toggle the window by clicking menubar icon or typing hot key.
 Advantage of this mode is that app does not fill any workspace. You can see your timeline on demand anytime.
+This mode is default on macOS or Linux.
 - **normal window mode**: App starts with a normal window like a separated browser window. You can put/resize window
 as you like in your workspace.
 
@@ -86,7 +87,7 @@ The JSON file can contain below key-values:
 `hot_key` is a key sequence to toggle application window. The shortcut key is defined globally.
 The format is a [Electron's accelerator](https://github.com/electron/electron/blob/master/docs/api/accelerator.md).
 Please see the document to know how to configure this value.
-Default value is `"CmdOrCtrl+Shift+S"`. If you want to disable, please set empty string or `null`. 
+Default value is `"CmdOrCtrl+Shift+Enter"`. If you want to disable, please set empty string or `null`. 
 
 ### `icon_color`
 
