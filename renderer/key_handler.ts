@@ -3,6 +3,7 @@ import {remote} from 'electron';
 import * as Mousetrap from 'mousetrap';
 import * as Ipc from './ipc';
 import log from './log';
+import PluginsLoader from './plugins';
 import {Config, Account} from '../main/config';
 
 function scrollable() {
@@ -58,6 +59,7 @@ const ShortcutActions = {
 export default function setupKeymaps(
     config: Config,
     account: Account,
+    loader: PluginsLoader,
 ) {
     const dataDir = config.__DATA_DIR || '/';
     for (const key in config.keymaps) {
@@ -84,6 +86,16 @@ export default function setupKeymaps(
                 } catch (e) {
                     log.error('Failed to run shortcut script ' + script, e);
                 }
+            });
+        } else if (action.startsWith('plugin:')) {
+            // Format is 'plugin:{name}:{action}'
+            const split = action.split(':').slice(1);
+            if (split.length <= 1) {
+                log.error('Invalid format keymap. Plugin-defined action should be "plugin:{name}:{action}":', action);
+                continue;
+            }
+            Mousetrap.bind(key, e => {
+                loader.runKeyShortcut(e, split[0], split[1]);
             });
         } else if (action.startsWith('/')) {
             Mousetrap.bind(key, e => {

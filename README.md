@@ -312,7 +312,7 @@ Make `package.json` manually or by `$ npm init` in the directory.
 }
 ```
 
-Finally make `index.js` as below:
+And make `index.js` as below:
 
 ```javascript
 module.exports = {
@@ -324,7 +324,31 @@ module.exports = {
 
 Package must export one object.
 If the object has a function as a value of `preload` key, it will be called at page being loaded.
-The function which receives two parameters `config` and `account`.
+The function receives two parameters `config` and `account`.
+
+By defining `keymaps` key you can define plugin-defined key shortcut action.
+
+```javascript
+module.exports = {
+    preload(config, account) {
+        console.log('Hello from plugin!', config, account);
+    },
+    keymaps: {
+        'alert-hello'(event, config, account) {
+            event.preventDefault();
+            alert('Hello, ' + account.name);
+        }
+    }
+};
+```
+
+The object of `keymaps` has keymap action name (key) and its handler (value). Here 'alert-hello'
+key shortcut action is defined. Key shortcut handler takes 3 arguments. `config` and `account`
+is the same as `preload`'s. `event` is a `KeyboardEvent` browser event on the key shortcut
+being called. You can cancel default event behavior by `.preventDefault()` method.
+
+User can specify the key shortcut as `plugin:{plugin name}:{action name}`. In above example,
+`plugin:hello:alert-hello` is available in `keymaps` section in config.json.
 
 Note that you can use below APIs in the script.
 
@@ -354,6 +378,8 @@ $ npm install mstdn-plugin-hello
 
 And then write what plugin should be loaded to `"plugins"` section of your account in `config.json`.
 `"hello"` should be added to the list.
+If listed plugin defines some keymaps, you can specify it in `keymaps` section with
+`plugin:{name}:{action}` format.
 
 ```json
 {
@@ -368,12 +394,17 @@ And then write what plugin should be loaded to `"plugins"` section of your accou
             ]
         }
     ],
+    "keymaps": {
+        ...
+
+        "ctrl+h": "plugin:hello:alert-hello"
+    },
 
     ...
 }
 ```
 
-You can enable different plugin for each your accounts.
+Note that you can enable different plugin for each your accounts.
 
 Finally open Mstdn.app and see DevTools via [Menu] -> [View] -> [Developper Tools] -> console.
 If window is too small to see DevTools, please make window size bigger.

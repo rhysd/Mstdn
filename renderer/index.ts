@@ -6,6 +6,6 @@ import PluginsLoader from './plugins';
 Ipc.on('mstdn:config', (c: Config, a: Account) => {
     const loader = new PluginsLoader(c, a);
     loader.loadAfterAppPrepared();
-    setupKeymaps(c, a);
+    setupKeymaps(c, a, loader);
     document.title = `${document.title} @${a.name}@${a.host}`;
 });

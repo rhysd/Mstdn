@@ -3,7 +3,10 @@ import {Config, Account} from '../main/config';
 import log from './log';
 
 interface Plugin {
-    preload(c: Config, a: Account): void;
+    preload?(c: Config, a: Account): void;
+    keymaps?: {
+        [action: string]: (e: KeyboardEvent, c: Config, a: Account) => void;
+    };
 }
 interface Plugins {
     [module_path: string]: Plugin;
@@ -82,5 +85,35 @@ export default class PluginsLoader {
 
         log.info('Plugins were loaded:', this.preloads);
         return true;
+    }
+
+    findPluginByName(name: string): Plugin | null {
+        const pluginName = `mstdn-plugin-${name}`;
+        for (const p in this.preloads) {
+            if (p.endsWith(pluginName)) {
+                return this.preloads[p];
+            }
+        }
+        return null;
+    }
+
+    runKeyShortcut(event: KeyboardEvent, name: string, action: string) {
+        const plugin = this.findPluginByName(name);
+        if (plugin === null) {
+            log.error(`While trying to execute key shortcut '${action}', plugin for '${name}' not found:`, this.preloads);
+            return;
+        }
+
+        const f = (plugin.keymaps || {})[action];
+        if (!f) {
+            log.error(`There is no key shortcut action '${action}' in plugin '${name}'`, plugin);
+            return;
+        }
+
+        try {
+            f(event, this.config, this.account);
+        } catch (e) {
+            log.error(`Error while executing plugin-defined key short action: ${action} with plugin '${name}'`, e);
+        }
     }
 }
