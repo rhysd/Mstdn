@@ -70,6 +70,10 @@ as you like in your workspace.
 In both modes, app remembers the size and location of its window. So you need to specify window size
 (or location in normal window mode) only once.
 
+After starting app, you would see login page of your instance. Some instances allow to login with
+other web services (e.g. login to pawoo.net with Pixiv account). However, Mstdn.app cannot fully
+support it. So please try to login with normal flow.
+
 ## Customization
 
 Mstdn can be customized with JSON config file at `{app dir}/config.json`
