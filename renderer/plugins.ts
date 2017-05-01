@@ -3,10 +3,10 @@ import {Config, Account} from '../main/config';
 import log from './log';
 
 interface Plugin {
-    preload?(c: Config, a: Account): void;
     keymaps?: {
         [action: string]: (e: KeyboardEvent, c: Config, a: Account) => void;
     };
+    preload?(c: Config, a: Account): void;
 }
 interface Plugins {
     [module_path: string]: Plugin;
