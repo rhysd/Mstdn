@@ -5,9 +5,18 @@ import * as menubar from 'menubar';
 import {Config, Account, hostUrl} from './config';
 import {partitionForAccount} from './account_switcher';
 import log from './log';
-import {IS_DEBUG, IS_DARWIN, IS_WINDOWS, IS_LINUX, APP_ICON, PRELOAD_JS, USER_CSS, trayIcon} from './common';
+import {IS_DEBUG, IS_DARWIN, IS_WINDOWS, IS_LINUX, APP_ICON, PRELOAD_JS, USER_CSS, IOS_SAFARI_USERAGENT, trayIcon} from './common';
 
 const ELECTRON_ISSUE_9230 = IS_WINDOWS || IS_LINUX;
+
+function shouldOpenInternal(host: string, url: string): boolean {
+    if (host.startsWith('https://pawoo.net') && url.startsWith('https://accounts.pixiv.net/login?')) {
+        log.debug('accounts.pixiv.net opens and will redirect to pawoo.net for signin with Pixiv account.');
+        return true;
+    }
+
+    return false;
+}
 
 export default class Window {
     static create(account: Account, config: Config, mb: Menubar.MenubarApp | null = null) {
@@ -35,10 +44,17 @@ export default class Window {
         }
 
         browser.webContents.on('will-navigate', (e, url) => {
-            if (!url.startsWith(hostUrl(this.account))) {
-                e.preventDefault();
-                shell.openExternal(url);
+            const host = hostUrl(this.account);
+            if (url.startsWith(host)) {
+                return;
             }
+
+            if (shouldOpenInternal(host, url)) {
+                return;
+            }
+
+            e.preventDefault();
+            shell.openExternal(url);
             log.debug('Opened URL with external browser (will-navigate)', url);
         });
         browser.webContents.on('new-window', (e, url) => {
@@ -90,7 +106,13 @@ export default class Window {
             e.preventDefault();
             this.browser.loadURL(hostUrl(this.account) + '/auth/sign_in');
         });
-        this.browser.loadURL(url);
+        if (url.startsWith('https://pawoo.net')) {
+            this.browser.loadURL(url, {
+                userAgent: IOS_SAFARI_USERAGENT,
+            });
+        } else {
+            this.browser.loadURL(url);
+        }
     }
 
     close() {
