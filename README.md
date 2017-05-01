@@ -71,8 +71,8 @@ In both modes, app remembers the size and location of its window. So you need to
 (or location in normal window mode) only once.
 
 After starting app, you would see login page of your instance. Some instances allow to login with
-other web services (e.g. login to pawoo.net with Pixiv account). However, Mstdn.app cannot fully
-support it. So please try to login with normal flow.
+other web services. However, Mstdn.app cannot fully support it. If you encounter some problem
+with customized login feature, please try to login with normal flow instead.
 
 ## Customization
 
