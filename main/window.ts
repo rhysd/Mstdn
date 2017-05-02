@@ -5,9 +5,7 @@ import * as menubar from 'menubar';
 import {Config, Account, hostUrl} from './config';
 import {partitionForAccount} from './account_switcher';
 import log from './log';
-import {IS_DEBUG, IS_DARWIN, IS_WINDOWS, IS_LINUX, APP_ICON, PRELOAD_JS, USER_CSS, IOS_SAFARI_USERAGENT, trayIcon} from './common';
-
-const ELECTRON_ISSUE_9230 = IS_WINDOWS || IS_LINUX;
+import {IS_DEBUG, IS_DARWIN, IS_WINDOWS, APP_ICON, PRELOAD_JS, USER_CSS, IOS_SAFARI_USERAGENT, trayIcon} from './common';
 
 function shouldOpenInternal(host: string, url: string): boolean {
     if (host.startsWith('https://pawoo.net') && url.startsWith('https://accounts.pixiv.net/login?')) {
@@ -58,12 +56,6 @@ export default class Window {
             log.debug('Opened URL with external browser (will-navigate)', url);
         });
         browser.webContents.on('new-window', (e, url) => {
-            if (ELECTRON_ISSUE_9230) {
-                // XXX:
-                // On Windows or Linux, rel="noopener" lets app crash on preventing the event.
-                // Issue: https://github.com/electron/electron/issues/9230
-                return;
-            }
             e.preventDefault();
             shell.openExternal(url);
             log.debug('Opened URL with external browser (new-window)', url);

@@ -50,7 +50,7 @@
     "typescript": "^2.2.2"
   },
   "dependencies": {
-    "electron": "^1.6.5",
+    "electron": "^1.6.8-beta",
     "electron-window-state": "^4.1.1",
     "loglevel": "^1.4.1",
     "menubar": "github:rhysd/menubar#mstdn",
