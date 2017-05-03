@@ -7,6 +7,8 @@ import loadConfig from './config';
 // loading this application. We need to disable the callback.
 app.removeAllListeners();
 
+require('electron-context-menu')({});
+
 const appReady = new Promise<void>(resolve => app.once('ready', resolve));
 
 process.on('unhandledRejection', (reason: string) => {
