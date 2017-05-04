@@ -1,3 +1,5 @@
-<!-- Please do not forget to write your OS and version of Mstdn.app -->
+- Your OS: <!-- Please write -->
+- App version: <!-- Please write -->
 
+<!-- Please start your description from here -->
 
