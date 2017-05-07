@@ -1,4 +1,5 @@
 import {app, dialog} from 'electron';
+import * as contextMenu from 'electron-context-menu';
 import log from './log';
 import startApp from './app';
 import loadConfig from './config';
@@ -7,7 +8,7 @@ import loadConfig from './config';
 // loading this application. We need to disable the callback.
 app.removeAllListeners();
 
-require('electron-context-menu')({});
+contextMenu();
 
 const appReady = new Promise<void>(resolve => app.once('ready', resolve));
 
