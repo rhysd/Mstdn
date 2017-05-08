@@ -10,7 +10,7 @@ function scrollable(pred: (elem: HTMLElement) => void) {
     const scrollables = document.querySelectorAll('.scrollable') as NodeListOf<HTMLElement>;
     if (scrollables.length === 0) {
         log.error('Scrollable element was not found!');
-        return
+        return;
     }
     for (const elem of scrollables) {
         pred(elem);

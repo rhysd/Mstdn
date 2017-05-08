@@ -1,8 +1,6 @@
 declare namespace ElectronContextMenu {
     interface Options {
         window?: Electron.BrowserWindow | Electron.WebViewElement;
-        prepend?: (params: any, win: Electron.BrowserWindow) => Electron.MenuItem[];
-        append?: (...args: any[]) => any;
         showInspectElement?: boolean;
         labels?: {
             cut: string;
@@ -12,7 +10,9 @@ declare namespace ElectronContextMenu {
             copyLink: string;
             inspect: string;
         };
-        shouldShowMenu?: (event: Event, params: any) => boolean;
+        append?(...args: any[]): any;
+        prepend?(params: any, win: Electron.BrowserWindow): Electron.MenuItem[];
+        shouldShowMenu?(event: Event, params: any): boolean;
     }
 }
 declare module 'electron-context-menu' {
