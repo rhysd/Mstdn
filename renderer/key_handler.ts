@@ -6,13 +6,15 @@ import log from './log';
 import PluginsLoader from './plugins';
 import {Config, Account} from '../main/config';
 
-function scrollable() {
-    const scrollable = document.querySelector('.scrollable');
-    if (!scrollable) {
+function scrollable(pred: (elem: HTMLElement) => void) {
+    const scrollables = document.querySelectorAll('.scrollable') as NodeListOf<HTMLElement>;
+    if (scrollables.length === 0) {
         log.error('Scrollable element was not found!');
-        return {scrollTop: 0};
+        return
     }
-    return scrollable;
+    for (const elem of scrollables) {
+        pred(elem);
+    }
 }
 
 function navigateTo(host: string, path: string) {
@@ -34,16 +36,16 @@ function navigateTo(host: string, path: string) {
 
 const ShortcutActions = {
     'scroll-top': () => {
-        scrollable().scrollTop = 0;
+        scrollable(s => { s.scrollTop = 0; });
     },
     'scroll-bottom': () => {
-        scrollable().scrollTop = document.body.scrollHeight;
+        scrollable(s => { s.scrollTop = document.body.scrollHeight; });
     },
     'scroll-down': () => {
-        scrollable().scrollTop += window.innerHeight / 3;
+        scrollable(s => { s.scrollTop += window.innerHeight / 3; });
     },
     'scroll-up': () => {
-        scrollable().scrollTop -= window.innerHeight / 3;
+        scrollable(s => { s.scrollTop -= window.innerHeight / 3; });
     },
     'next-account': () => {
         Ipc.send('mstdn:next-account');
