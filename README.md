@@ -452,7 +452,7 @@ Please feel free to make an issue on GitHub or mention on Mastodon/Twitter.
 [npm]: https://www.npmjs.com/package/mstdn
 [yarn]: https://yarnpkg.com/en/package/mstdn
 [Release page]: https://github.com/rhysd/Mstdn/releases
-[Electron]: electron.atom.io
+[Electron]: https://electron.atom.io/
 [sandbox doc]: https://github.com/electron/electron/blob/master/docs/api/sandbox-option.md
 [npm version badge]: https://badge.fury.io/js/mstdn.svg
 [Node.js standard libraries]: https://nodejs.org/api/
