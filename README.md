@@ -77,7 +77,8 @@ You can switch them with `"normal_window"` option (please see below
 - **menubar mode**: Window is attached to the menubar. You can toggle the window
   by clicking the menubar icon or typing the hot key. The advantage of this mode
   is that the app does not fill any workspaces. You can see your timeline on
-  demand anytime. This mode is the default on macOS and Linux.
+  demand anytime. Like as menus in menubar on macOS, menubar window is automatically
+  hidden when it loses its focus. This mode is the default on macOS and Linux.
 - **normal window mode**: App starts with a normal window like a separated
   browser window. You can put/resize window wherever you would like in your
   workspace.
