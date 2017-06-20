@@ -115,7 +115,7 @@ export default class Window {
         this.browser.removeAllListeners();
         if (this.menubar) {
             // Note:
-            // menubar.windowClear() won't be called because all listners were removed
+            // menubar.windowClear() won't be called because all listeners were removed
             delete this.menubar.window;
         }
         this.browser.close();
