@@ -3,12 +3,12 @@ declare namespace ElectronContextMenu {
         window?: Electron.BrowserWindow | Electron.WebviewTag;
         showInspectElement?: boolean;
         labels?: {
-            cut: string;
-            copy: string;
-            paste: string;
-            save: string;
-            copyLink: string;
-            inspect: string;
+            cut?: string;
+            copy?: string;
+            paste?: string;
+            save?: string;
+            copyLink?: string;
+            inspect?: string;
         };
         append?(...args: any[]): any;
         prepend?(params: any, win: Electron.BrowserWindow): Electron.MenuItem[];

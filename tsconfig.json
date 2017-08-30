@@ -11,7 +11,7 @@
     "noUnusedParameters": true,
     "noEmitOnError": true,
     "strictNullChecks": true,
-    "target": "es2015",
+    "target": "es2016",
     "sourceMap": true
   },
   "include": [
