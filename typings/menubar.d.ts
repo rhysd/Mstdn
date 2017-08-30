@@ -35,17 +35,23 @@ declare namespace Menubar {
 		showWindow(): void;
 		hideWindow(): void;
 	}
-	interface MenubarOptions extends Electron.BrowserWindowOptions {
+	interface MenubarOptions extends Electron.BrowserWindowConstructorOptions {
 		dir?: string;
 		index?: string;
 		tooltip?: string;
 		tray?: Electron.Tray;
+		icon?: string;
+		width?: number;
+		height?: number;
+		show?: boolean;
 		preloadWindow?: boolean;
 		alwaysOnTop?: boolean;
 		showOnAllWorkspaces?: boolean;
 		windowPosition?: Position;
 		showDockIcon?: boolean;
 		showOnRightClick?: boolean;
+		autoHideMenuBar?: boolean;
+		webPreferences?: Electron.WebPreferences;
 	}
 }
 

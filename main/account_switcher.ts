@@ -19,7 +19,7 @@ export default class AccountSwitcher extends EventEmitter {
 
     constructor(accounts: Account[]) {
         super();
-        const submenu = [] as Electron.MenuItemOptions[];
+        const submenu = [] as Electron.MenuItemConstructorOptions[];
 
         for (const account of accounts.filter(a => a.name !== '')) {
             let name = account.name;

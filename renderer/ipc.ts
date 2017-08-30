@@ -2,7 +2,7 @@ import {ipcRenderer as ipc} from 'electron';
 import log from './log';
 
 export function on(channel: IpcChannelFromMain, callback: (...args: any[]) => void) {
-    ipc.on(channel, (_, ...args: any[]) => {
+    ipc.on(channel, (_: any, ...args: any[]) => {
         log.info('IPC: Received from:', channel, args);
         callback(...args);
     });

@@ -1,6 +1,6 @@
 declare namespace ElectronContextMenu {
     interface Options {
-        window?: Electron.BrowserWindow | Electron.WebViewElement;
+        window?: Electron.BrowserWindow | Electron.WebviewTag;
         showInspectElement?: boolean;
         labels?: {
             cut: string;
