@@ -1,4 +1,4 @@
-import * as path from 'path';
+import {join} from 'path';
 import {remote} from 'electron';
 import * as Mousetrap from 'mousetrap';
 import * as Ipc from './ipc';
@@ -71,7 +71,7 @@ export default function setupKeymaps(
                 log.info('Loading external script is limited because Chromium sandbox is enabled. Disable shortcut:', action);
                 continue;
             }
-            const script = path.join(dataDir, action);
+            const script = join(dataDir, action);
 
             let plugin: (c: Config, a: Account) => void;
             try {

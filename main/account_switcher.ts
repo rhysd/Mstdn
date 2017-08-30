@@ -49,7 +49,8 @@ export default class AccountSwitcher extends EventEmitter {
             submenu,
         });
 
-        const menu = Menu.getApplicationMenu();
+        // Note: Electron's type definitions don't support nullable types yet.
+        const menu = Menu.getApplicationMenu() as Electron.Menu | null;
         if (menu !== null) {
             // Insert item before 'Help'
             menu.insert(menu.items.length - 1, item);

@@ -14,7 +14,7 @@
     "build:bundle:release": "NODE_ENV=production browserify -x electron renderer/index.js -o renderer/preload.js",
     "build:release": "npm run build:ts && npm run build:bundle:release",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "tslint --project tsconfig.json --type-check $(git ls-files | grep -E \"\\.ts$\")",
+    "lint": "tslint --project tsconfig.json --type-check",
     "watch": "guard --watchdir main renderer typings",
     "debug": "NODE_ENV=development electron .",
     "start": "NODE_ENV=production electron .",
@@ -38,14 +38,14 @@
   "homepage": "https://github.com/rhysd/Mstdn#readme",
   "devDependencies": {
     "@types/electron-window-state": "^2.0.29",
-    "@types/loglevel": "^1.4.29",
+    "@types/loglevel": "^1.4.30",
     "@types/mousetrap": "^1.5.34",
-    "@types/node": "^8.0.0",
+    "@types/node": "^8.0.26",
     "browserify": "^14.4.0",
-    "electron-packager": "^8.7.1",
-    "npm-run-all": "^4.0.2",
-    "tslint": "^5.4.3",
-    "typescript": "^2.3.4"
+    "electron-packager": "^9.0.0",
+    "npm-run-all": "^4.1.1",
+    "tslint": "^5.7.0",
+    "typescript": "^2.4.2"
   },
   "dependencies": {
     "electron": "^1.7.5",

@@ -34,7 +34,9 @@ export default class Window {
         public browser: Electron.BrowserWindow,
         public state: any /*XXX: ElectronWindowState.WindowState */,
         public account: Account,
+        /* tslint:disable:no-shadowed-variable */
         public menubar: Menubar.MenubarApp | null,
+        /* tslint:enable:no-shadowed-variable */
     ) {
         if (!IS_DARWIN) {
             // Users can still access menu bar with pressing Alt key.
